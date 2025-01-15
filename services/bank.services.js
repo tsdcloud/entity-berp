@@ -41,7 +41,7 @@ export const getAllBanksService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count({
+        const total = await bankClient.count({
             where:{isActive:true}
         });
         return {
@@ -91,9 +91,9 @@ export const getBanksByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count({
+        const total = await bankClient.count({
             where:{isActive:true}
-        });
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

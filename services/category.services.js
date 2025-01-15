@@ -34,14 +34,14 @@ export const getAllCategoriesService = async(body) =>{
 
     try {
         let categories = await categoryClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count({
+        const total = await categoryClient.count({
             where:{isActive:true}
         });
         return {
@@ -91,7 +91,7 @@ export const getCategoriesByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count({
+        const total = await categoryClient.count({
             where:{isActive:true}
         });
         return {

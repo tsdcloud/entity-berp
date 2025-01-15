@@ -59,6 +59,7 @@ model Customer{
 model Grade{
   id    String  @id   @default(uuid())
   name  String
+  employees Employee[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -69,6 +70,7 @@ model Grade{
 model Echelon{
   id    String   @id    @default(uuid())
   name  String
+  employees Employee[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -80,6 +82,7 @@ model Echelon{
 model Category{
   id    String   @id    @default(uuid())
   name  String
+  employees Employee[]
   isActive  Boolean @default(true)
   
   createdBy String
@@ -90,6 +93,7 @@ model Category{
 model Function{
   id    String  @id   @default(uuid())
   name  String
+  employees Employee[]
   isActive  Boolean @default(true)
   
   createdBy String
@@ -104,16 +108,81 @@ model Entity{
   address   String
   phone     String
   townId    String
-  town      Town    @relation(fields: [townId], references: [id])
-  departement        Department[]
-  entityBankAccount EntityBankAccount[]
-  shift     Shift[]
-  supplier  Supplier[]
+  towns     Town    @relation(fields: [townId], references: [id])
+  departements       Department[]
+  entityBankAccounts EntityBankAccount[]
+  shifts    Shift[]
+  suppliers Supplier[]
+  employees Employee[]
   isActive  Boolean @default(true)
 
   createdBy String
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
+}
+
+model Employee{
+  id    String  @id   @default(uuid())
+  email      String?
+  phone      String?
+  picture    String?
+  functionId String
+  function   Function  @relation(fields: [functionId], references: [id])
+  gradeId    String
+  grade      Grade     @relation(fields: [gradeId], references: [id])
+  echelonId  String
+  echelon    Echelon   @relation(fields: [echelonId], references: [id])
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id])
+  userId     String
+  entityId   String
+  entity     Entity    @relation(fields: [entityId], references: [id])
+  permissions          Permission[]
+  roles      Role[]
+
+  createdBy  String
+  updatedBy  String?
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  isActive   Boolean   @default(true)
+}
+
+model   Permission{
+  id    String  @id   @default(uuid())
+  permissionName      String
+  displayName         String
+  description         String?
+  employees   Employee[]
+  roles      Role[]
+  createdBy  String
+  updatedBy  String?
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  isActive   Boolean   @default(true)
+}
+
+model Role{
+  id    String  @id   @default(uuid())
+  roleName      String
+  displayName   String
+  description   String?
+  employees   Employee[]
+  permissions Permission[]
+  createdBy  String
+  updatedBy  String?
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  isActive   Boolean   @default(true)
+}
+
+model Application{
+  id    String  @id   @default(uuid())
+  name  String
+  url   String
+  description   String?
 }
 
 model Supplier{
@@ -126,6 +195,7 @@ model Supplier{
   isActive  Boolean @default(true)
 
   createdBy String
+  updatedBy  String?
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
 }

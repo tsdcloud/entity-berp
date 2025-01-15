@@ -66,7 +66,7 @@ export const getClientByIdService = async(id) =>{
         let client = await clientClient.findFirst({
             where:{id, isActive: true},
         });
-        if (!client) throw new Error(`No town found.`)
+        if (!client) throw new Error(`No client found.`)
         return client;
     } catch (error) {
         console.log(error);
@@ -136,9 +136,6 @@ export const deleteClientServices = async (id) =>{
             where: {id},
             data:{isActive:false}
         });
-        // let town = await townClient.delete({
-        //     where: {id}
-        // });
         return client
     } catch (error) {
         console.log(error);

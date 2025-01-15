@@ -41,7 +41,7 @@ export const getAllCountriesService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count({
+        const total = await categoryClient.count({
             where:{isActive:true}
         });
         return {
@@ -91,7 +91,7 @@ export const getCountryByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count({
+        const total = await categoryClient.count({
             where:{isActive:true}
         });
         return {

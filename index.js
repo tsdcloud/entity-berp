@@ -21,6 +21,7 @@ import shiftRoutes from './routes/shift.controllers.js';
 import supplierRoutes from './routes/supplier.routes.js';
 import townRoutes from './routes/town.routes.js';
 import HTTP_STATUS from './utils/http.utils.js';
+import { errorHandler } from './middlewares/errorHandlers.js';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -49,6 +50,7 @@ app.use((req, res) => {
         .send(`<h1>404 Not Found</h1>`);
 });
 
+app.use(errorHandler);
 app.listen(process.env.PORT, process.env.ADDRESS, ()=>{
     console.log(`Server listening on ${process.env.ADDRESS}:${process.env.PORT}`)
 });
