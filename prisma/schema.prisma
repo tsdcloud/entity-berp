@@ -1,0 +1,214 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Country{
+  id  String  @id @default(uuid())
+  name  String
+  district District[]
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Town{
+  id    String  @id   @default(uuid())
+  name  String
+  districtId  String
+  district District @relation(fields: [districtId], references: [id])
+  entity   Entity[]
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model District{
+  id    String  @id   @default(uuid())
+  name  String
+  countryId  String
+  country Country @relation(fields: [countryId], references: [id])
+  town    Town[]
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Customer{
+  id    String  @id   @default(uuid())
+  name  String
+  address String
+  phone   String
+  clientBankAccount  ClientBankAccount[]
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Grade{
+  id    String  @id   @default(uuid())
+  name  String
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Echelon{
+  id    String   @id    @default(uuid())
+  name  String
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+
+model Category{
+  id    String   @id    @default(uuid())
+  name  String
+  isActive  Boolean @default(true)
+  
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Function{
+  id    String  @id   @default(uuid())
+  name  String
+  isActive  Boolean @default(true)
+  
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Entity{
+  id    String   @id    @default(uuid())
+  name  String
+  localisation    String
+  address   String
+  phone     String
+  townId    String
+  town      Town    @relation(fields: [townId], references: [id])
+  departement        Department[]
+  entityBankAccount EntityBankAccount[]
+  shift     Shift[]
+  supplier  Supplier[]
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Supplier{
+  id    String  @id   @default(uuid())
+  name  String
+  email String
+  phone String
+  entityId  String
+  entity    Entity  @relation(fields: [entityId], references: [id])
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Shift{
+  id    String  @id   @default(uuid())
+  name  String?
+  startTime     DateTime
+  endTime       DateTime
+  entityId      String
+  entity        Entity  @relation(fields: [entityId], references: [id])
+  isActive      Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model Department{
+  id    String    @id   @default(uuid())
+  name  String
+  entityId        String
+  entity          Entity @relation(fields: [entityId], references: [id])
+  services        Service[]
+  isActive  Boolean @default(true)
+  
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+
+model Service{
+  id    String   @id    @default(uuid())
+  name  String
+  departmentId    String
+  department      Department   @relation(fields: [departmentId], references: [id])
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+
+model Bank{
+  id    String  @id      @default(uuid())
+  name  String
+  address       String
+  phone         String
+  clientBankAccount ClientBankAccount[]
+  entityBankAccount EntityBankAccount[]
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model ClientBankAccount{
+  id    String   @id  @default(uuid())
+  accountNumber  String
+  bankId    String
+  bank      Bank    @relation(fields: [bankId], references: [id])
+  clientId  String
+  customer  Customer  @relation(fields: [clientId], references: [id])
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model EntityBankAccount{
+  id    String   @id  @default(uuid())
+  accountNumber  String
+  bankId    String
+  bank      Bank    @relation(fields: [bankId], references: [id])
+  entityId  String
+  entity    Entity  @relation(fields: [entityId], references: [id])
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}

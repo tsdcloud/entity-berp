@@ -1,0 +1,54 @@
+import express from 'express'
+import bodyParser from 'body-parser';
+import cors from 'cors'
+const app = express();
+
+// Modules
+import bankRoutes from './routes/bank.routes.js'
+import categoryRoutes from './routes/category.routes.js'
+import clientRoutes from './routes/client.routes.js'
+import clientBankAccountRoutes from './routes/clientBankAccount.routes.js'
+import countryRoutes from './routes/country.routes.js';
+import departmentRoutes from './routes/department.routes.js';
+import districtRoutes from './routes/district.routes.js';
+import echelonRoutes from './routes/echelon.routes.js';
+import entityRoutes from './routes/entity.routes.js';
+import entityBankAccountRoutes from './routes/entity.routes.js';
+import functionRoutes from './routes/function.routes.js';
+import gradeRoutes from './routes/grade.routes.js';
+import serviceRoutes from './routes/service.routes.js';
+import shiftRoutes from './routes/shift.controllers.js';
+import supplierRoutes from './routes/supplier.routes.js';
+import townRoutes from './routes/town.routes.js';
+import HTTP_STATUS from './utils/http.utils.js';
+
+app.use(cors());
+app.use(bodyParser.json());
+
+
+app.use("/api/banks", bankRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/clients", clientRoutes);
+app.use("/api/client-bank-accounts", clientBankAccountRoutes);
+app.use("/api/countries", countryRoutes);
+app.use("/api/departments", departmentRoutes);
+app.use("/api/districts", districtRoutes);
+app.use("/api/echelons", echelonRoutes);
+app.use("/api/entities", entityRoutes);
+app.use("/api/entity-bank-accounts", entityBankAccountRoutes);
+app.use("/api/functions", functionRoutes);
+app.use("/api/grades", gradeRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/shifts", shiftRoutes);
+app.use("/api/suppliers", supplierRoutes);
+app.use("/api/towns", townRoutes);
+
+app.use((req, res) => {
+    return res
+        .status(HTTP_STATUS.NOT_FOUND.statusCode)
+        .send(`<h1>404 Not Found</h1>`);
+});
+
+app.listen(process.env.PORT, process.env.ADDRESS, ()=>{
+    console.log(`Server listening on ${process.env.ADDRESS}:${process.env.PORT}`)
+});
