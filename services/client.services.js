@@ -34,14 +34,16 @@ export const getAllClientsService = async(body) =>{
 
     try {
         let clients = await clientClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count();
+        const total = await clientClient.count({
+            where:{isActive:true}
+        });
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getClientsByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await clientClient.count();
+        const total = await clientClient.count({
+            where:{isActive:true}
+        });
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

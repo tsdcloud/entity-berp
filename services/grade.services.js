@@ -41,7 +41,9 @@ export const getAllGradesService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await gradeClient.count();
+        const total = await gradeClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getGradeByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await gradeClient.count();
+        const total = await gradeClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

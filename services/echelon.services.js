@@ -41,7 +41,9 @@ export const getAllEchelonsService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await echelonClient.count();
+        const total = await echelonClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getEchelonByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await echelonClient.count();
+        const total = await echelonClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

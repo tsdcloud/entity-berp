@@ -41,7 +41,9 @@ export const getAllTownsService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await townClient.count();
+        const total = await townClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getTownsByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await townClient.count();
+        const total = await townClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

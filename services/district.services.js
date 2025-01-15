@@ -41,7 +41,9 @@ export const getAllDistrictsService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await districtClient.count();
+        const total = await districtClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getDistrictsByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await districtClient.count();
+        const total = await districtClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

@@ -41,7 +41,9 @@ export const getAllServicesService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await serviceClient.count();
+        const total = await serviceClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getServicesByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await serviceClient.count();
+        const total = await serviceClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

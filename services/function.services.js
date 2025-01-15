@@ -41,7 +41,9 @@ export const getAllFunctionsService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await functionClient.count();
+        const total = await functionClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getFunctionsByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await functionClient.count();
+        const total = await functionClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),

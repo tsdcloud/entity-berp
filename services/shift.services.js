@@ -41,7 +41,9 @@ export const getAllShiftService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await shiftClient.count();
+        const total = await shiftClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / LIMIT),
@@ -89,7 +91,9 @@ export const getShiftsByParams = async (request) =>{
                 createdAt:'desc'
             }
         });
-        const total = await shiftClient.count();
+        const total = await shiftClient.count({
+            where:{isActive:true}
+        });;
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
