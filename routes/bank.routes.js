@@ -1,5 +1,3 @@
-// import { userInEntity } from './../middlewares/user.middleware';
-// import { verifyToken } from "../middlewares/verifyToken";
 import { Router } from "express";
 import { 
     createBankController, 

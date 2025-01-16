@@ -78,7 +78,6 @@ model Echelon{
   updateAt  DateTime  @updatedAt
 }
 
-
 model Category{
   id    String   @id    @default(uuid())
   name  String
@@ -137,8 +136,8 @@ model Employee{
   userId     String
   entityId   String
   entity     Entity    @relation(fields: [entityId], references: [id])
-  permissions          Permission[]
-  roles      Role[]
+  employeePermissions  EmployeePermission[]
+  employeeRoles   EmployeeRole[]
 
   createdBy  String
   updatedBy  String?
@@ -146,6 +145,48 @@ model Employee{
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   isActive   Boolean   @default(true)
+}
+
+model EmployeePermission{
+  id    String  @id         @default(uuid())
+  employeeId    String
+  employee      Employee    @relation(fields: [employeeId], references: [id])
+  permissionId  String
+  permission    Permission  @relation(fields: [permissionId], references: [id])
+  isActive  Boolean   @default(true)
+
+  createdBy String
+  updatedBy  String?
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model ApplicationPermission{
+  id    String  @id         @default(uuid())
+  applicationId    String
+  application      Application    @relation(fields: [applicationId], references: [id])
+  permissionId  String
+  permission    Permission  @relation(fields: [permissionId], references: [id])
+  isActive  Boolean   @default(true)
+
+  createdBy String
+  updatedBy  String?
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+model EmployeeRole{
+  id    String  @id       @default(uuid())
+  employeeId    String
+  employee      Employee  @relation(fields: [employeeId], references: [id])
+  roleId        String
+  role          Role      @relation(fields: [roleId], references: [id])
+  isActive  Boolean   @default(true)
+
+  createdBy String
+  updatedBy  String?
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
 }
 
 model   Permission{
@@ -153,8 +194,9 @@ model   Permission{
   permissionName      String
   displayName         String
   description         String?
-  employees   Employee[]
-  roles      Role[]
+  employeePermissions  EmployeePermission[]
+  permissionRoles      PermissionRole[]
+  applicationPermissions     ApplicationPermission[]
   createdBy  String
   updatedBy  String?
 
@@ -163,13 +205,27 @@ model   Permission{
   isActive   Boolean   @default(true)
 }
 
+model PermissionRole{
+  id    String    @id   @default(uuid())
+  permissionId      String
+  permission        Permission    @relation(fields: [permissionId], references: [id])
+  roleId            String
+  role              Role          @relation(fields: [roleId], references: [id])
+  isActive  Boolean   @default(true)
+
+  createdBy String
+  updatedBy  String?
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
 model Role{
   id    String  @id   @default(uuid())
   roleName      String
   displayName   String
   description   String?
-  employees   Employee[]
-  permissions Permission[]
+  employeeRoles   EmployeeRole[]
+  permissionRoles PermissionRole[]
   createdBy  String
   updatedBy  String?
 
@@ -182,7 +238,15 @@ model Application{
   id    String  @id   @default(uuid())
   name  String
   url   String
+  image String?
+  applicationPermissions     ApplicationPermission[]
   description   String?
+  isActive  Boolean   @default(true)
+
+  createdBy String
+  updatedBy  String?
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
 }
 
 model Supplier{
@@ -191,8 +255,8 @@ model Supplier{
   email String
   phone String
   entityId  String
-  entity    Entity  @relation(fields: [entityId], references: [id])
-  isActive  Boolean @default(true)
+  entity    Entity    @relation(fields: [entityId], references: [id])
+  isActive  Boolean   @default(true)
 
   createdBy String
   updatedBy  String?

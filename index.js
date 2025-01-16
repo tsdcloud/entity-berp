@@ -4,6 +4,14 @@ import cors from 'cors'
 const app = express();
 
 // Modules
+import applicationRoutes from './routes/application.routes.js';
+import applicationPermissionRoutes from './routes/applicationPermission.routes.js';
+import employeeRoutes from './routes/employee.routes.js';
+import employeePermissionRoutes from './routes/employeePermission.routes.js';
+import employeeRoleRoutes from './routes/employeeRole.routes.js';
+import permissionRoutes from './routes/permission.routes.js';
+import roleRoutes from './routes/role.routes.js';
+import permissionRoleRoutes from './routes/permissionRole.routes.js';
 import bankRoutes from './routes/bank.routes.js'
 import categoryRoutes from './routes/category.routes.js'
 import clientRoutes from './routes/client.routes.js'
@@ -22,11 +30,22 @@ import supplierRoutes from './routes/supplier.routes.js';
 import townRoutes from './routes/town.routes.js';
 import HTTP_STATUS from './utils/http.utils.js';
 import { errorHandler } from './middlewares/errorHandlers.js';
+// import { logger } from './middlewares/logEvents.js';
 
 app.use(cors());
 app.use(bodyParser.json());
 
-
+// app.use(logger)
+app.use("/api/banks", bankRoutes);
+app.use("/api/applications", applicationRoutes);
+app.use("/api/application-permissions", applicationPermissionRoutes);
+app.use("/api/employees", employeeRoutes);
+app.use("/api/employee-permissions", employeePermissionRoutes);
+app.use("/api/employee-roles", employeeRoleRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/role", roleRoutes);
+app.use("/api/permission-roles", permissionRoleRoutes);
+app.use("/api/banks", bankRoutes);
 app.use("/api/banks", bankRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/clients", clientRoutes);
