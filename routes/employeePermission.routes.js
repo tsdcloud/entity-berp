@@ -16,3 +16,5 @@ routes.get('/:id', getEmployeePermissionByIdController);
 routes.post('/', createEmployeePermission, createEmployeePermissionController);
 routes.patch('/:id', updateEmployeePermission, updateEmployeePermissionController);
 routes.delete('/:id', deleteEmployeePermissionController);
+
+export default routes

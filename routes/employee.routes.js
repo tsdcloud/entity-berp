@@ -16,3 +16,5 @@ routes.get('/:id', getEmployeeByIdController);
 routes.post('/', createRole, createEmployeeController);
 routes.patch('/:id', updateRole, updateEmployeeController);
 routes.delete('/:id', deleteEmployeeController);
+
+export default routes;

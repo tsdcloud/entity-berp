@@ -46,7 +46,6 @@ app.use("/api/permissions", permissionRoutes);
 app.use("/api/role", roleRoutes);
 app.use("/api/permission-roles", permissionRoleRoutes);
 app.use("/api/banks", bankRoutes);
-app.use("/api/banks", bankRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/client-bank-accounts", clientBankAccountRoutes);

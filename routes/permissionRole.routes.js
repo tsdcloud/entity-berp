@@ -16,3 +16,5 @@ routes.get('/:id', getPermissionRoleByIdController);
 routes.post('/', createPermissionRole, createPermissionRoleController);
 routes.patch('/:id', updatePermissionRole, updatePermissionRoleController);
 routes.delete('/:id', deletePermissionRoleController);
+
+export default routes;

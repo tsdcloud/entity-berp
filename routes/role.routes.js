@@ -16,3 +16,5 @@ routes.get('/:id', getRoleByIdController);
 routes.post('/', createRole, createRoleController);
 routes.patch('/:id', updateRole, updateRoleController);
 routes.delete('/:id', deleteRoleController);
+
+export default routes;

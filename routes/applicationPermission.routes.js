@@ -16,3 +16,5 @@ routes.get('/:id', getApplicationPermissionByIdController);
 routes.post('/', createApplication, createApplicationPermissionController);
 routes.patch('/:id', updateApplication, updateApplicationPermissionController);
 routes.delete('/:id', deleteApplicationPermissionController);
+
+export default routes;
