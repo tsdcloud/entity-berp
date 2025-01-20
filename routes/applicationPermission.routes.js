@@ -6,15 +6,15 @@ import {
     getApplicationPermissionByIdController, 
     updateApplicationPermissionController 
 } from "../controllers/applicationPermission.controllers.js";
-import {createApplication, updateApplication} from '../validations/applicationPermission.validation.js'
+import {createApplicationPermission, updateApplicationPermission} from '../validations/applicationPermission.validation.js'
 
 const routes = Router();
 
 // routes.use('*', verifyToken)
 routes.get('/', getAllApplicationPermissionsController);
 routes.get('/:id', getApplicationPermissionByIdController);
-routes.post('/', createApplication, createApplicationPermissionController);
-routes.patch('/:id', updateApplication, updateApplicationPermissionController);
+routes.post('/', createApplicationPermission, createApplicationPermissionController);
+routes.patch('/:id', updateApplicationPermission, updateApplicationPermissionController);
 routes.delete('/:id', deleteApplicationPermissionController);
 
 export default routes;

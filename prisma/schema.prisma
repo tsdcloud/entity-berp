@@ -10,7 +10,7 @@ datasource db {
 
 model Country{
   id  String  @id @default(uuid())
-  name  String
+  name  String    @unique
   district District[]
   isActive  Boolean @default(true)
 
@@ -29,6 +29,7 @@ model Town{
   createdBy String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  @@unique([name, districtId])
 }
 
 model District{
@@ -41,11 +42,25 @@ model District{
   createdBy String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  @@unique([name, countryId])
+}
+
+model Site{
+  id    String    @id   @default(uuid())
+  name  String
+  entityId        String
+  entity          Entity      @relation(fields: [entityId], references: [id])
+  isActive  Boolean @default(true)
+
+  createdBy String
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  @@unique([name, entityId])
 }
 
 model Customer{
   id    String  @id   @default(uuid())
-  name  String
+  name  String  @unique
   address String
   phone   String
   clientBankAccount  ClientBankAccount[]
@@ -58,7 +73,7 @@ model Customer{
 
 model Grade{
   id    String  @id   @default(uuid())
-  name  String
+  name  String  @unique
   employees Employee[]
   isActive  Boolean @default(true)
 
@@ -69,7 +84,7 @@ model Grade{
 
 model Echelon{
   id    String   @id    @default(uuid())
-  name  String
+  name  String   @unique
   employees Employee[]
   isActive  Boolean @default(true)
 
@@ -80,7 +95,7 @@ model Echelon{
 
 model Category{
   id    String   @id    @default(uuid())
-  name  String
+  name  String   @unique
   employees Employee[]
   isActive  Boolean @default(true)
   
@@ -91,7 +106,7 @@ model Category{
 
 model Function{
   id    String  @id   @default(uuid())
-  name  String
+  name  String  @unique
   employees Employee[]
   isActive  Boolean @default(true)
   
@@ -102,7 +117,7 @@ model Function{
 
 model Entity{
   id    String   @id    @default(uuid())
-  name  String
+  name  String   @unique
   localisation    String
   address   String
   phone     String
@@ -113,6 +128,7 @@ model Entity{
   shifts    Shift[]
   suppliers Supplier[]
   employees Employee[]
+  sites     Site[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -122,8 +138,8 @@ model Entity{
 
 model Employee{
   id    String  @id   @default(uuid())
-  email      String?
-  phone      String?
+  email      String?  @unique
+  phone      String?  @unique
   picture    String?
   functionId String
   function   Function  @relation(fields: [functionId], references: [id])
@@ -251,7 +267,7 @@ model Application{
 
 model Supplier{
   id    String  @id   @default(uuid())
-  name  String
+  name  String  @unique
   email String
   phone String
   entityId  String
@@ -266,9 +282,9 @@ model Supplier{
 
 model Shift{
   id    String  @id   @default(uuid())
-  name  String?
-  startTime     DateTime
-  endTime       DateTime
+  name  String? @unique
+  startTime     String
+  endTime       String
   entityId      String
   entity        Entity  @relation(fields: [entityId], references: [id])
   isActive      Boolean @default(true)
@@ -276,11 +292,13 @@ model Shift{
   createdBy String
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
+
+  @@unique([startTime, endTime])
 }
 
 model Department{
   id    String    @id   @default(uuid())
-  name  String
+  name  String    
   entityId        String
   entity          Entity @relation(fields: [entityId], references: [id])
   services        Service[]
@@ -290,7 +308,6 @@ model Department{
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
 }
-
 
 model Service{
   id    String   @id    @default(uuid())
@@ -304,10 +321,9 @@ model Service{
   updateAt  DateTime  @updatedAt
 }
 
-
 model Bank{
   id    String  @id      @default(uuid())
-  name  String
+  name  String  @unique
   address       String
   phone         String
   clientBankAccount ClientBankAccount[]

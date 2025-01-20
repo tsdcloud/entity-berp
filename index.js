@@ -1,10 +1,11 @@
 import express from 'express'
 import bodyParser from 'body-parser';
-import cors from 'cors'
+import cors from 'cors';
+import { verifyToken } from './middlewares/verifyJwt.middleware.js';
 const app = express();
 
 // Modules
-import applicationRoutes from './routes/application.routes.js';
+// import applicationRoutes from './routes/application.routes.js';
 import applicationPermissionRoutes from './routes/applicationPermission.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
 import employeePermissionRoutes from './routes/employeePermission.routes.js';
@@ -28,22 +29,23 @@ import serviceRoutes from './routes/service.routes.js';
 import shiftRoutes from './routes/shift.controllers.js';
 import supplierRoutes from './routes/supplier.routes.js';
 import townRoutes from './routes/town.routes.js';
+import siteRoutes from './routes/site.routes.js';
 import HTTP_STATUS from './utils/http.utils.js';
 import { errorHandler } from './middlewares/errorHandlers.js';
 // import { logger } from './middlewares/logEvents.js';
 
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use(verifyToken);
 // app.use(logger)
 app.use("/api/banks", bankRoutes);
-app.use("/api/applications", applicationRoutes);
+// app.use("/api/applications", applicationRoutes);
 app.use("/api/application-permissions", applicationPermissionRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/employee-permissions", employeePermissionRoutes);
 app.use("/api/employee-roles", employeeRoleRoutes);
 app.use("/api/permissions", permissionRoutes);
-app.use("/api/role", roleRoutes);
+app.use("/api/roles", roleRoutes);
 app.use("/api/permission-roles", permissionRoleRoutes);
 app.use("/api/banks", bankRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -59,6 +61,7 @@ app.use("/api/functions", functionRoutes);
 app.use("/api/grades", gradeRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/shifts", shiftRoutes);
+app.use("/api/sites", siteRoutes);
 app.use("/api/suppliers", supplierRoutes);
 app.use("/api/towns", townRoutes);
 
