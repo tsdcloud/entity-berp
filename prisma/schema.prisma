@@ -140,6 +140,7 @@ model Employee{
   id    String  @id   @default(uuid())
   email      String?  @unique
   phone      String?  @unique
+  name       String?  @unique
   picture    String?
   functionId String
   function   Function  @relation(fields: [functionId], references: [id])

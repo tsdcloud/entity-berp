@@ -80,7 +80,7 @@ export const getAllSitesController = async(req, res) => {
     }
 
     try {
-        let sites = await getAllSitesController(req.body);
+        let sites = await getAllSitesService(req.body);
         res
         .status(HTTP_STATUS.OK.statusCode)
         .send(sites)

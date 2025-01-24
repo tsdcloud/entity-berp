@@ -36,7 +36,7 @@ import { errorHandler } from './middlewares/errorHandlers.js';
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(verifyToken);
+// app.use(verifyToken);
 // app.use(logger)
 app.use("/api/banks", bankRoutes);
 // app.use("/api/applications", applicationRoutes);
@@ -72,6 +72,6 @@ app.use((req, res) => {
 });
 
 app.use(errorHandler);
-app.listen(process.env.PORT, process.env.ADDRESS, ()=>{
+app.listen(process.env.PORT, ()=>{
     console.log(`Server listening on ${process.env.ADDRESS}:${process.env.PORT}`)
 });
