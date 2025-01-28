@@ -41,7 +41,7 @@ export const getAllDepartmentsService = async(body) =>{
                 createdAt:'desc'
             }
         });
-        const total = await categoryClient.count({
+        const total = await departmentClient.count({
             where:{isActive:true}
         });
         return {
