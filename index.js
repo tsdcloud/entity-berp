@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import cors from 'cors';
 import { verifyToken } from './middlewares/verifyJwt.middleware.js';
 const app = express();
@@ -36,6 +37,7 @@ import { errorHandler } from './middlewares/errorHandlers.js';
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(morgan("common"));
 // app.use(verifyToken);
 // app.use(logger)
 app.use("/api/banks", bankRoutes);
@@ -73,5 +75,5 @@ app.use((req, res) => {
 
 app.use(errorHandler);
 app.listen(process.env.PORT, ()=>{
-    console.log(`Server listening on ${process.env.ADDRESS}:${process.env.PORT}`)
+    console.log(`Server listening on ${process.env.PORT}`)
 });
