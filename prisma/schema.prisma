@@ -61,7 +61,7 @@ model Site{
 model Customer{
   id    String  @id   @default(uuid())
   name  String  @unique
-  address String
+  email String
   phone   String
   clientBankAccount  ClientBankAccount[]
   isActive  Boolean @default(true)
@@ -119,7 +119,6 @@ model Entity{
   id    String   @id    @default(uuid())
   name  String   @unique
   localisation    String
-  address   String
   phone     String
   townId    String
   towns     Town    @relation(fields: [townId], references: [id])
