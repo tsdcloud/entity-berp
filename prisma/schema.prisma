@@ -48,6 +48,7 @@ model District{
 model Site{
   id    String    @id   @default(uuid())
   name  String
+  typeSite        SITE_TYPE   @default(FIELD)
   entityId        String
   entity          Entity      @relation(fields: [entityId], references: [id])
   isActive  Boolean @default(true)
@@ -361,4 +362,9 @@ model EntityBankAccount{
   createdBy String
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
+}
+
+enum SITE_TYPE{
+  HEADQUARTER
+  FIELD
 }
