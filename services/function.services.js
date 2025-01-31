@@ -34,7 +34,7 @@ export const getAllFunctionsService = async(body) =>{
 
     try {
         let functions = await functionClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
@@ -84,7 +84,7 @@ export const getFunctionsByParams = async (request) =>{
     const skip = (page - 1) * limit;
     try {
         let functions = await functionClient.findMany({
-            where:queries,
+            where:{...queries, isActive:true},
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{

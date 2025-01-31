@@ -15,8 +15,8 @@ export const createRole = [
 ];
 
 export const updateRole = [
-    body('roleName').notEmpty().withMessage('roleName is required'),
-    body('displayName').notEmpty().withMessage('displayName is required'),
+    body('roleName').optional().notEmpty().withMessage('roleName is required'),
+    body('displayName').optional().notEmpty().withMessage('displayName is required'),
     body('description').optional().notEmpty().withMessage('description is required'),
     body('createdBy').optional().notEmpty().withMessage('createdBy is required'),
     (req, res, next) => {
