@@ -80,21 +80,24 @@ export const getEmployeeByIdService = async(id) =>{
  * @returns 
  */
 export const getEmployeesByParams = async (request) =>{
-    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, ...queries } = request; 
+    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, search, ...queries } = request; 
     const skip = (page - 1) * limit;
     try {
         let employees = await employeeClient.findMany({
-            where:queries,
+            where:!search ? queries : {
+                name:{
+                    contains:search
+                },
+                isActive:true
+            },
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await employeeClient.count({
-            where:{isActive:true}
-        });;
-        return {
+        const total = await employeeClient.count();
+        return search ? {data: employees} :{
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
             total,
