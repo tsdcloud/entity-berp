@@ -2,7 +2,7 @@ import { body, validationResult } from 'express-validator';
 
 export const createTown = [
   body('name').notEmpty().withMessage('name is required'),
-  body('countryId').notEmpty().withMessage('countryId is required'),
+  body('districtId').notEmpty().withMessage('districtId is required'),
   body('createdBy').notEmpty().withMessage('createdBy is required'),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -15,7 +15,7 @@ export const createTown = [
 
 export const updateTown = [
     body('name').optional().notEmpty().withMessage('name should not be left empty'),
-    body('countryId').optional().notEmpty().withMessage('countryId should not be left empty'),
+    body('districtId').optional().notEmpty().withMessage('districtId should not be left empty'),
     body('createdBy').optional().notEmpty().withMessage('createbBy should not be left empty'),
     (req, res, next) => {
       const errors = validationResult(req);

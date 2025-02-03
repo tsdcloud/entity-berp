@@ -25,6 +25,7 @@ model Town{
   districtId  String
   district District @relation(fields: [districtId], references: [id])
   entity   Entity[]
+  isActive  Boolean @default(true)
 
   createdBy String
   createdAt DateTime  @default(now())
@@ -38,6 +39,7 @@ model District{
   countryId  String
   country Country @relation(fields: [countryId], references: [id])
   town    Town[]
+  isActive  Boolean @default(true)
 
   createdBy String
   createdAt DateTime  @default(now())

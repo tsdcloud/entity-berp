@@ -1,5 +1,5 @@
 import {prisma} from '../config/config.js';
-const districtClient = prisma.service;
+const districtClient = prisma.district;
 
 
 const LIMIT = 100;
