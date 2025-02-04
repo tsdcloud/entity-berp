@@ -34,7 +34,10 @@ export const getAllTownsService = async(body) =>{
 
     try {
         let towns = await townClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
+            include:{
+                district:true
+            },
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
