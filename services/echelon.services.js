@@ -34,7 +34,7 @@ export const getAllEchelonsService = async(body) =>{
 
     try {
         let echelons = await echelonClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{

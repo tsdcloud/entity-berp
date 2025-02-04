@@ -34,7 +34,7 @@ export const getAllGradesService = async(body) =>{
 
     try {
         let grades = await gradeClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
