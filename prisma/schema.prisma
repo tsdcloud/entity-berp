@@ -144,15 +144,15 @@ model Employee{
   phone      String?  @unique
   name       String?  @unique
   picture    String?
-  functionId String
-  function   Function  @relation(fields: [functionId], references: [id])
-  gradeId    String
-  grade      Grade     @relation(fields: [gradeId], references: [id])
-  echelonId  String
-  echelon    Echelon   @relation(fields: [echelonId], references: [id])
-  categoryId String
-  category   Category  @relation(fields: [categoryId], references: [id])
-  userId     String
+  functionId String?
+  function   Function?  @relation(fields: [functionId], references: [id])
+  gradeId    String?
+  grade      Grade?     @relation(fields: [gradeId], references: [id])
+  echelonId  String?
+  echelon    Echelon?   @relation(fields: [echelonId], references: [id])
+  categoryId String?
+  category   Category?  @relation(fields: [categoryId], references: [id])
+  userId     String     @unique
   entityId   String
   entity     Entity    @relation(fields: [entityId], references: [id])
   employeePermissions  EmployeePermission[]

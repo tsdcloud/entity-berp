@@ -82,13 +82,25 @@ export const getEmployeeByIdService = async(id) =>{
 export const getEmployeesByParams = async (request) =>{
     const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, search, ...queries } = request; 
     const skip = (page - 1) * limit;
+
     try {
         let employees = await employeeClient.findMany({
-            where:!search ? queries : {
+            where:!search ? {...queries, isActive:true} : {
                 name:{
                     contains:search
                 },
                 isActive:true
+            },
+            include:{
+                employeePermissions:{
+                    include:{
+                        permission:true
+                    }
+                },
+                employeeRoles:true,
+                echelon:true,
+                function:true,
+                entity:true
             },
             skip: parseInt(skip),
             take: parseInt(limit),
