@@ -39,6 +39,9 @@ export const getAllDistrictsService = async(body) =>{
             take: parseInt(LIMIT),
             orderBy:{
                 createdAt:'desc'
+            },
+            include:{
+                country:true
             }
         });
         const total = await districtClient.count({
@@ -65,6 +68,9 @@ export const getDistrictByIdService = async(id) =>{
     try {
         let district = await districtClient.findFirst({
             where:{id, isActive: true},
+            include:{
+                country:true
+            }
         });
         if (!district) throw new Error(`No district found.`)
         return district;
@@ -89,11 +95,14 @@ export const getDistrictsByParams = async (request) =>{
             take: parseInt(limit),
             orderBy:{
                 createdAt:'desc'
+            },
+            include:{
+                country:true
             }
         });
         const total = await districtClient.count({
             where:{isActive:true}
-        });;
+        });
         return {
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
