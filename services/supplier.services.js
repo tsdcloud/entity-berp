@@ -34,9 +34,12 @@ export const getAllSuppliersService = async(body) =>{
 
     try {
         let suppliers = await supplierClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                entity:true
+            },
             orderBy:{
                 createdAt:'desc'
             }

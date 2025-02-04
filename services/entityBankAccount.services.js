@@ -34,9 +34,13 @@ export const getAllEntityBankAccountService = async(body) =>{
 
     try {
         let entityBankAccount = await entityBankAccountClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                bank:true,
+                entity:true
+            },
             orderBy:{
                 createdAt:'desc'
             }
