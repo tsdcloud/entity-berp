@@ -34,9 +34,13 @@ export const getAllClientBankAccountService = async(body) =>{
 
     try {
         let clientBankAccounts = await clientBankAccountClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                bank:true,
+                customer:true
+            },
             orderBy:{
                 createdAt:'desc'
             }
