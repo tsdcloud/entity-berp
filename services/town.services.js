@@ -138,7 +138,7 @@ export const updateTownService = async (id, body) =>{
  */
 export const deleteTownService = async (id) =>{
     try {
-        let town = await consommableClient.update({
+        let town = await townClient.update({
             where: {id},
             data:{isActive:false}
         });
