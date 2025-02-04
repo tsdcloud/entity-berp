@@ -84,7 +84,10 @@ export const getTownsByParams = async (request) =>{
     const skip = (page - 1) * limit;
     try {
         let town = await townClient.findMany({
-            where:queries,
+            where:{...queries, isActive:true},
+            include:{
+                district:true
+            },
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{
