@@ -34,9 +34,12 @@ export const getAllEntitiesService = async(body) =>{
 
     try {
         let entities = await entityClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                towns:true,
+            },
             orderBy:{
                 createdAt:'desc'
             }

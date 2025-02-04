@@ -37,6 +37,13 @@ export const getAllEmployeesService = async(body) =>{
             where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                function:true,
+                grade:true,
+                echelon:true,
+                entity:true,
+                category:true
+            },
             orderBy:{
                 createdAt:'desc'
             }

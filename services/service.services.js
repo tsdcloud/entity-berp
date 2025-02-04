@@ -34,9 +34,12 @@ export const getAllServicesService = async(body) =>{
 
     try {
         let services = await serviceClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                department:true
+            },
             orderBy:{
                 createdAt:'desc'
             }
