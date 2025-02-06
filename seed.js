@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 
 
-const excelFilePath = 'C:/Users/EVERMATE/Downloads/user_data.csv';
+const excelFilePath = 'C:/Users/EVERMATE/Downloads/api_users_customuser.csv';
 
 function readExcelFile(filePath) {
   const workbook = xlsx.readFile(filePath);
@@ -34,9 +34,9 @@ async function seedDatabase() {
     //     const numRef = generateRefNum(lastIncidentType)
 
       const incidentType = {
-        name: row['username'],
+        name: `${row['first_name']} ${row['last_name']}`,
         email: row['email'],
-        userId: row['user_id'],
+        userId: row['id'],
         // numRef,
         createdBy:"user 1",
         entityId:"235bb09e-72c2-48da-bcf8-252a0df80876"
@@ -46,18 +46,18 @@ async function seedDatabase() {
 
       // Insert data into the database
       await prisma.employee
-      .create({
-        data: incidentType,
-      });
-    //   .upsert({
-    //     where: {
-    //       name: incidentType.name,
-    //     },
-    //     update: {
-    //       name: incidentType.name,
-    //     },
-    //     create: {...incidentType},
-    // })
+    //   .create({
+    //     data: incidentType,
+    //   });
+      .upsert({
+        where: {
+          name: incidentType.name,
+        },
+        update: {
+          name: incidentType.name,
+        },
+        create: {...incidentType},
+    })
     }
 
     console.log('Database seeded successfully!');
