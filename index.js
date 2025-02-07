@@ -23,7 +23,7 @@ import departmentRoutes from './routes/department.routes.js';
 import districtRoutes from './routes/district.routes.js';
 import echelonRoutes from './routes/echelon.routes.js';
 import entityRoutes from './routes/entity.routes.js';
-import entityBankAccountRoutes from './routes/entity.routes.js';
+import entityBankAccountRoutes from './routes/entityBankAccount.routes.js';
 import functionRoutes from './routes/function.routes.js';
 import gradeRoutes from './routes/grade.routes.js';
 import serviceRoutes from './routes/service.routes.js';
