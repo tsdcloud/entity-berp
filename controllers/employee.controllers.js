@@ -64,7 +64,6 @@ export const getEmployeeByIdController = async (req, res) => {
  * @returns 
  */
 export const getAllEmployeesController = async(req, res) => {
-    
     if(Object.keys(req.query).length !== 0 && req.query.constructor === Object){
         try {
             let  employees = await getEmployeesByParams(req.query);

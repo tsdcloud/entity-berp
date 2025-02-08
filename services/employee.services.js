@@ -35,8 +35,8 @@ export const getAllEmployeesService = async(body) =>{
     try {
         let employees = await employeeClient.findMany({
             where:{isActive:true},
-            skip: parseInt(skip),
-            take: parseInt(LIMIT),
+            // skip: parseInt(skip),
+            // take: parseInt(LIMIT),
             include:{
                 function:true,
                 grade:true,
@@ -52,9 +52,9 @@ export const getAllEmployeesService = async(body) =>{
             where:{isActive:true}
         });
         return {
-            page: parseInt(page),
-            totalPages: Math.ceil(total / LIMIT),
-            total,
+            // page: parseInt(page),
+            // totalPages: Math.ceil(total / LIMIT),
+            // total,
             data: employees,
         };
     } catch (error) {
