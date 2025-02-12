@@ -101,7 +101,7 @@ export const getAllSitesController = async(req, res) => {
  */
 export const updateSiteController = async (req, res) => {
     try {
-        let site = await updateSiteController(req.params.id, req.body);
+        let site = await updateSiteService(req.params.id, req.body);
         res
         .status(HTTP_STATUS.OK.statusCode)
         .send(site);
@@ -122,7 +122,7 @@ export const updateSiteController = async (req, res) => {
  */
 export const deleteSiteController = async (req, res) => {
     try {
-        let site = await deleteSiteController(req.params.id);
+        let site = await deleteSiteServices(req.params.id);
         res
         .status(HTTP_STATUS.NO_CONTENT.statusCode)
         .send(site)

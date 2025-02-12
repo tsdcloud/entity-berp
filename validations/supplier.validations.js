@@ -2,7 +2,7 @@ import { body, validationResult } from 'express-validator';
 
 export const createSupplier = [
   body('name').notEmpty().withMessage('name is required'),
-  body('address').notEmpty().withMessage('address is required'),
+  body('entityId').notEmpty().withMessage('entityId is required'),
   body('phone').notEmpty().withMessage('phone is required'),
   body('email').notEmpty().withMessage('email is required'),
   body('createdBy').notEmpty().withMessage('createdBy is required'),
@@ -17,7 +17,7 @@ export const createSupplier = [
 
 export const updateSupplier = [
     body('name').optional().notEmpty().withMessage('Name should not be left empty'),
-    body('address').optional().notEmpty().withMessage('address should not be left empty'),
+    body('entityId').optional().notEmpty().withMessage('entityId is required'),
     body('phone').optional().notEmpty().withMessage('phone should not be left empty'),
     body('email').optional().notEmpty().withMessage('email should not be left empty'),
     body('createdBy').optional().notEmpty().withMessage('createdBy should not be left empty'),
