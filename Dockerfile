@@ -1,4 +1,4 @@
-FROM node:18 AS builder
+FROM node:20.10 AS builder
 LABEL maintainer="ysiaka@bfclimited.com"
 # WORKDIR /App/BERP
 WORKDIR /App/entity
@@ -8,6 +8,11 @@ RUN npm install --legacy-peer-deps
 COPY . .
 # RUN npm run build
 #ENV NODE_ENV=production
+RUN npx prisma generate --force
+
+RUN npm install prisma --save-dev --force
+RUN npm install express --force
+
 EXPOSE 3000
 CMD ["node", "index.js"]
 # Étape 2 : Serveur Node.js minimal
