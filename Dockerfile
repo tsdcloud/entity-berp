@@ -1,24 +1,25 @@
-FROM node:20.10 AS builder
-LABEL maintainer="ysiaka@bfclimited.com"
-# WORKDIR /App/BERP
-WORKDIR /App/entity
+# Utiliser l'image de base Node.js
+FROM node:20.10.0
 
-COPY package* ./
-RUN npm install --legacy-peer-deps
+# Définir le répertoire de travail
+WORKDIR /App/Entity
+
+# Copier package.json et package-lock.json
+COPY package*.json ./
+
+# Installer les dépendances Node.js
+RUN npm install
+
+RUN npm install @prisma/client@5.12.0 prisma@5.12.0
+
+# Copier le reste du projet
 COPY . .
-# RUN npm run build
-#ENV NODE_ENV=production
+
+# Générer le client Prisma
 RUN npx prisma generate
 
-RUN npm install prisma --save-dev --force
-RUN npm install express --force
-
+# Exposer le port (3000 est souvent utilisé pour Express)
 EXPOSE 3000
+
+# Lancer l'application
 CMD ["node", "index.js"]
-# Étape 2 : Serveur Node.js minimal
-# FROM node:18
-# WORKDIR /App/entity
-#RUN npm install -g serve
-#COPY --from=builder /App/BERP/dist .
-# EXPOSE 3000
-# CMD ["serve", "-s", ".", "--listen", "tcp://0.0.0.0:3000"]
