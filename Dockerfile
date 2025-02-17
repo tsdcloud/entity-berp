@@ -1,4 +1,4 @@
-FROM node:20. AS builder
+FROM node:20.10 AS builder
 LABEL maintainer="ysiaka@bfclimited.com"
 # WORKDIR /App/BERP
 WORKDIR /App/entity
