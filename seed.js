@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 
 
-const excelFilePath = 'C:/Users/EVERMATE/Downloads/api_users_customuser.csv';
+const excelFilePath = 'C:/Users/EVERMATE/Downloads/api_users_customuser (3).csv';
 
 function readExcelFile(filePath) {
   const workbook = xlsx.readFile(filePath);

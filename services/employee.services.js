@@ -117,9 +117,9 @@ export const getEmployeesByParams = async (request) =>{
         });
         const total = await employeeClient.count();
         return search ? {data: employees} :{
-            page: parseInt(page),
-            totalPages: Math.ceil(total / limit),
-            total,
+            // page: parseInt(page),
+            // totalPages: Math.ceil(total / limit),
+            // total,
             data: employees,
         };
     } catch (error) {
