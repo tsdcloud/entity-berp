@@ -8,7 +8,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 # RUN npm run build
 #ENV NODE_ENV=production
-RUN npx prisma generate --schema=./prisma/schema.prisma --force
+RUN npx prisma generate
 
 RUN npm install prisma --save-dev --force
 RUN npm install express --force
