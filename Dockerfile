@@ -1,4 +1,4 @@
-FROM node:20.10 AS builder
+FROM node:20. AS builder
 LABEL maintainer="ysiaka@bfclimited.com"
 # WORKDIR /App/BERP
 WORKDIR /App/entity
@@ -8,7 +8,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 # RUN npm run build
 #ENV NODE_ENV=production
-RUN npx prisma generate --force
+RUN npx prisma generate --schema=./prisma/schema.prisma --force
 
 RUN npm install prisma --save-dev --force
 RUN npm install express --force
