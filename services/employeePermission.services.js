@@ -35,6 +35,10 @@ export const getAllEmployeePermissionsService = async(body) =>{
     try {
         let employeePermissions = await employeePermissionClient.findMany({
             where:{isActive:true},
+            include:{
+                role: true,
+                permission:true
+            },
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
@@ -65,6 +69,10 @@ export const getEmployeePermissionByIdService = async(id) =>{
     try {
         let employeePermission = await employeePermissionClient.findFirst({
             where:{id, isActive: true},
+            include:{
+                role: true,
+                permission:true
+            },
         });
         if (!employeePermission) throw new Error(`No employee permission found.`)
         return employeePermission;
@@ -85,6 +93,10 @@ export const getEmployeePermissionsByParams = async (request) =>{
     try {
         let employeePermissions = await employeePermissionClient.findMany({
             where:queries,
+            include:{
+                role: true,
+                permission:true
+            },
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{

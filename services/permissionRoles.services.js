@@ -35,6 +35,10 @@ export const getAllPermissionRolesService = async(body) =>{
     try {
         let permissionRoles = await permissionRoleClient.findMany({
             where:{isActive:true},
+            include:{
+                role: true,
+                permission:true
+            },
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
@@ -65,6 +69,10 @@ export const getPermissionRoleByIdService = async(id) =>{
     try {
         let permissionRole = await permissionRoleClient.findFirst({
             where:{id, isActive: true},
+            include:{
+                role: true,
+                permission:true
+            },
         });
         if (!permissionRole) throw new Error(`No permission role found.`)
         return permissionRole;
@@ -85,6 +93,10 @@ export const getPermissionRolesByParams = async (request) =>{
     try {
         let permissionRoles = await permissionRoleClient.findMany({
             where:queries,
+            include:{
+                role: true,
+                permission:true
+            },
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{

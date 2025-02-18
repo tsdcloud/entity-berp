@@ -35,6 +35,10 @@ export const getAllApplicationPermissionsService = async(body) =>{
     try {
         let applicationPermissions = await applicationPermissionClient.findMany({
             where:{isActive:true},
+            include:{
+                application: true,
+                permission: true
+            },
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{
@@ -65,6 +69,10 @@ export const getApplicationPermissionByIdService = async(id) =>{
     try {
         let applicationPermission = await applicationPermissionClient.findFirst({
             where:{id, isActive: true},
+            include:{
+                application: true,
+                permission: true
+            },
         });
         if (!applicationPermission) throw new Error(`No application permission found.`)
         return applicationPermission;
@@ -85,6 +93,10 @@ export const getApplicationPermissionsByParams = async (request) =>{
     try {
         let applicationPermissions = await applicationPermissionClient.findMany({
             where:queries,
+            include:{
+                application: true,
+                permission: true
+            },
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{
