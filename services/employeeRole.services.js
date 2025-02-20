@@ -69,6 +69,10 @@ export const getEmployeeRoleByIdService = async(id) =>{
     try {
         let employeeRole = await employeeRoleClient.findFirst({
             where:{id, isActive: true},
+            include:{
+                employee: true,
+                role:true
+            },
         });
         if (!employeeRole) throw new Error(`No employee role found.`)
         return employeeRole;
