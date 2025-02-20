@@ -37,12 +37,16 @@ export const getAllEmployeeRolesService = async(body) =>{
             where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
+            include:{
+                employee: true,
+                role:true
+            },
             orderBy:{
                 createdAt:'desc'
             }
         });
         const total = await employeeRoleClient.count({
-            where:{isActive:true}
+            where:{isActive:true},
         });
         return {
             page: parseInt(page),
@@ -87,6 +91,10 @@ export const getEmployeeRolesByParams = async (request) =>{
             where:queries,
             skip: parseInt(skip),
             take: parseInt(limit),
+            include:{
+                employee: true,
+                role:true
+            },
             orderBy:{
                 createdAt:'desc'
             }
