@@ -36,7 +36,7 @@ export const getAllEmployeePermissionsService = async(body) =>{
         let employeePermissions = await employeePermissionClient.findMany({
             where:{isActive:true},
             include:{
-                role: true,
+                employee: true,
                 permission:true
             },
             skip: parseInt(skip),
@@ -70,7 +70,7 @@ export const getEmployeePermissionByIdService = async(id) =>{
         let employeePermission = await employeePermissionClient.findFirst({
             where:{id, isActive: true},
             include:{
-                role: true,
+                employee: true,
                 permission:true
             },
         });
@@ -94,7 +94,7 @@ export const getEmployeePermissionsByParams = async (request) =>{
         let employeePermissions = await employeePermissionClient.findMany({
             where:queries,
             include:{
-                role: true,
+                employee: true,
                 permission:true
             },
             skip: parseInt(skip),
