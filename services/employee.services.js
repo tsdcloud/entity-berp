@@ -106,7 +106,7 @@ export const getEmployeesByParams = async (request) =>{
                 },
                 employeeRoles:{
                     include:{
-                        permission:true
+                        role:true
                     }
                 },
                 echelon:true,
