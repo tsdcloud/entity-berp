@@ -34,7 +34,7 @@ export const getAllCountriesService = async(body) =>{
 
     try {
         let countries = await countryClient.findMany({
-            // where:{isActive:true},
+            where:{isActive:true},
             skip: parseInt(skip),
             take: parseInt(LIMIT),
             orderBy:{

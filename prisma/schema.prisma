@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -7,388 +7,404 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model country{
-  id  String  @id @default(uuid())
-  name  String    @unique
-  district district[]
-  isActive  Boolean @default(true)
-
+model country {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  isActive  Boolean    @default(true)
   createdBy String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  district  district[]
 }
 
-model town{
-  id    String  @id   @default(uuid())
-  name  String
-  districtId  String
-  district district @relation(fields: [districtId], references: [id])
-  entity   entity[]
-  isActive  Boolean @default(true)
+model town {
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  isActive   Boolean  @default(true)
+  createdBy  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  entity     entity[]
+  district   district @relation(fields: [districtId], references: [id])
 
-  createdBy String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
   @@unique([name, districtId])
+  @@index([districtId], map: "town_districtId_fkey")
 }
 
-model district{
-  id    String  @id   @default(uuid())
-  name  String
-  countryId  String
-  country country @relation(fields: [countryId], references: [id])
-  town    town[]
-  isActive  Boolean @default(true)
-
+model district {
+  id        String   @id @default(uuid())
+  name      String
+  countryId String
+  isActive  Boolean  @default(true)
   createdBy String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  country   country  @relation(fields: [countryId], references: [id])
+  town      town[]
+
   @@unique([name, countryId])
+  @@index([countryId], map: "district_countryId_fkey")
 }
 
-model site{
-  id    String    @id   @default(uuid())
-  name  String
-  typeSite        SITE_TYPE   @default(FIELD)
-  entityId        String
-  entity          entity      @relation(fields: [entityId], references: [id])
-  isActive  Boolean @default(true)
-
+model site {
+  id        String    @id @default(uuid())
+  name      String
+  typeSite  SITE_TYPE @default(FIELD)
+  entityId  String
+  isActive  Boolean   @default(true)
   createdBy String
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
+  entity    entity    @relation(fields: [entityId], references: [id])
+
   @@unique([name, entityId])
+  @@index([entityId], map: "site_entityId_fkey")
 }
 
-model customer{
-  id    String  @id   @default(uuid())
-  name  String  @unique
-  email String
-  phone   String
-  clientBankAccount  clientbankaccount[]
-  isActive  Boolean @default(true)
+model customer {
+  id                String              @id @default(uuid())
+  name              String              @unique
+  email             String
+  phone             String
+  isActive          Boolean             @default(true)
+  createdBy         String
+  createdAt         DateTime            @default(now())
+  updateAt          DateTime            @updatedAt
+  clientBankAccount clientbankaccount[]
+}
 
+model grade {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  isActive  Boolean    @default(true)
   createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-}
-
-model grade{
-  id    String  @id   @default(uuid())
-  name  String  @unique
+  createdAt DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
   employees employee[]
-  isActive  Boolean @default(true)
-
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
 }
 
-model echelon{
-  id    String   @id    @default(uuid())
-  name  String   @unique
+model echelon {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  isActive  Boolean    @default(true)
+  createdBy String
+  createdAt DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
   employees employee[]
-  isActive  Boolean @default(true)
-
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
 }
 
-model category{
-  id    String   @id    @default(uuid())
-  name  String   @unique
+model category {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  isActive  Boolean    @default(true)
+  createdBy String
+  createdAt DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
   employees employee[]
-  isActive  Boolean @default(true)
-  
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
 }
 
-model Function{
-  id    String  @id   @default(uuid())
-  name  String  @unique
-  employees employee[]
-  isActive  Boolean @default(true)
-  
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-}
-
-model entity{
-  id              String   @id    @default(uuid())
-  name            String   @unique
-  localisation    String
-  phone           String
-  townId          String
-  towns              town    @relation(fields: [townId], references: [id])
+model entity {
+  id                 String              @id @default(uuid())
+  name               String              @unique
+  localisation       String
+  phone              String
+  townId             String
+  isActive           Boolean             @default(true)
+  createdBy          String
+  createdAt          DateTime            @default(now())
+  updateAt           DateTime            @updatedAt
+  article            article[]
   departements       department[]
+  employees          employee[]
+  towns              town                @relation(fields: [townId], references: [id])
   entityBankAccounts entitybankaccount[]
-  shifts    shift[]
-  suppliers supplier[]
-  employees employee[]
-  sites     site[]
-  article   article[]
-  isActive  Boolean @default(true)
+  shifts             shift[]
+  sites              site[]
+  suppliers          supplier[]
 
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  @@index([townId], map: "entity_townId_fkey")
 }
 
-model employee{
-  id    String  @id   @default(uuid())
-  email      String?  @unique
-  phone      String?  @unique
-  name       String?  @unique
-  picture    String?
-  functionId String?
-  function   Function?  @relation(fields: [functionId], references: [id])
-  gradeId    String?
-  grade      grade?     @relation(fields: [gradeId], references: [id])
-  echelonId  String?
-  echelon    echelon?   @relation(fields: [echelonId], references: [id])
-  categoryId String?
-  category   category?  @relation(fields: [categoryId], references: [id])
-  userId     String     @unique
-  entityId   String
-  entity     entity    @relation(fields: [entityId], references: [id])
-  employeePermissions  employeepermission[]
-  employeeRoles   employeerole[]
+model employee {
+  id                  String               @id @default(uuid())
+  email               String?              @unique
+  phone               String?              @unique
+  name                String?              @unique
+  picture             String?
+  functionId          String?
+  gradeId             String?
+  echelonId           String?
+  categoryId          String?
+  userId              String               @unique
+  entityId            String
+  createdBy           String
+  updatedBy           String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  isActive            Boolean              @default(true)
+  category            category?            @relation(fields: [categoryId], references: [id])
+  echelon             echelon?             @relation(fields: [echelonId], references: [id])
+  entity              entity               @relation(fields: [entityId], references: [id])
+  function            Renamedfunction?     @relation(fields: [functionId], references: [id])
+  grade               grade?               @relation(fields: [gradeId], references: [id])
+  employeePermissions employeepermission[]
+  employeeRoles       employeerole[]
+
+  @@index([categoryId], map: "employee_categoryId_fkey")
+  @@index([echelonId], map: "employee_echelonId_fkey")
+  @@index([entityId], map: "employee_entityId_fkey")
+  @@index([functionId], map: "employee_functionId_fkey")
+  @@index([gradeId], map: "employee_gradeId_fkey")
+}
+
+model employeepermission {
+  id           String     @id @default(uuid())
+  employeeId   String
+  permissionId String
+  isActive     Boolean    @default(true)
+  createdBy    String
+  updatedBy    String?
+  createdAt    DateTime   @default(now())
+  updateAt     DateTime   @updatedAt
+  employee     employee   @relation(fields: [employeeId], references: [id])
+  permission   permission @relation(fields: [permissionId], references: [id])
+
+  @@index([employeeId], map: "employeepermission_employeeId_fkey")
+  @@index([permissionId], map: "employeepermission_permissionId_fkey")
+}
+
+model applicationpermission {
+  id            String      @id @default(uuid())
+  applicationId String
+  permissionId  String
+  isActive      Boolean     @default(true)
+  createdBy     String
+  updatedBy     String?
+  createdAt     DateTime    @default(now())
+  updateAt      DateTime    @updatedAt
+  application   application @relation(fields: [applicationId], references: [id])
+  permission    permission  @relation(fields: [permissionId], references: [id])
+
+  @@index([applicationId], map: "applicationpermission_applicationId_fkey")
+  @@index([permissionId], map: "applicationpermission_permissionId_fkey")
+}
+
+model employeerole {
+  id         String   @id @default(uuid())
+  employeeId String
+  roleId     String
+  isActive   Boolean  @default(true)
   createdBy  String
   updatedBy  String?
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
+  employee   employee @relation(fields: [employeeId], references: [id])
+  role       role     @relation(fields: [roleId], references: [id])
 
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  isActive   Boolean   @default(true)
+  @@index([employeeId], map: "employeerole_employeeId_fkey")
+  @@index([roleId], map: "employeerole_roleId_fkey")
 }
 
-model employeepermission{
-  id    String  @id         @default(uuid())
-  employeeId    String
-  employee      employee    @relation(fields: [employeeId], references: [id])
-  permissionId  String
-  permission    permission  @relation(fields: [permissionId], references: [id])
-  isActive  Boolean   @default(true)
-
-  createdBy String
-  updatedBy  String?
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+model permission {
+  id                     String                  @id @default(uuid())
+  permissionName         String
+  displayName            String
+  description            String?
+  createdBy              String
+  updatedBy              String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  isActive               Boolean                 @default(true)
+  applicationPermissions applicationpermission[]
+  employeePermissions    employeepermission[]
+  permissionRoles        permissionrole[]
 }
 
-model applicationpermission{
-  id    String  @id         @default(uuid())
-  applicationId    String
-  application      application    @relation(fields: [applicationId], references: [id])
-  permissionId  String
-  permission    permission  @relation(fields: [permissionId], references: [id])
-  isActive  Boolean   @default(true)
+model permissionrole {
+  id           String     @id @default(uuid())
+  permissionId String
+  roleId       String
+  isActive     Boolean    @default(true)
+  createdBy    String
+  updatedBy    String?
+  createdAt    DateTime   @default(now())
+  updateAt     DateTime   @updatedAt
+  permission   permission @relation(fields: [permissionId], references: [id])
+  role         role       @relation(fields: [roleId], references: [id])
 
-  createdBy String
-  updatedBy  String?
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  @@index([permissionId], map: "permissionrole_permissionId_fkey")
+  @@index([roleId], map: "permissionrole_roleId_fkey")
 }
 
-model employeerole{
-  id    String  @id       @default(uuid())
-  employeeId    String
-  employee      employee  @relation(fields: [employeeId], references: [id])
-  roleId        String
-  role          role      @relation(fields: [roleId], references: [id])
-  isActive  Boolean   @default(true)
-
-  createdBy String
-  updatedBy  String?
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-}
-
-model   permission{
-  id    String  @id   @default(uuid())
-  permissionName      String
-  displayName         String
-  description         String?
-  employeePermissions  employeepermission[]
-  permissionRoles      permissionrole[]
-  applicationPermissions     applicationpermission[]
-  createdBy  String
-  updatedBy  String?
-
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  isActive   Boolean   @default(true)
-}
-
-model permissionrole{
-  id    String    @id   @default(uuid())
-  permissionId      String
-  permission        permission    @relation(fields: [permissionId], references: [id])
-  roleId            String
-  role              role          @relation(fields: [roleId], references: [id])
-  isActive  Boolean   @default(true)
-
-  createdBy String
-  updatedBy  String?
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
-}
-
-model role{
-  id    String  @id   @default(uuid())
-  roleName      String
-  displayName   String
-  description   String?
+model role {
+  id              String           @id @default(uuid())
+  roleName        String
+  displayName     String
+  description     String?
+  createdBy       String
+  updatedBy       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  isActive        Boolean          @default(true)
   employeeRoles   employeerole[]
   permissionRoles permissionrole[]
-  createdBy  String
-  updatedBy  String?
-
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  isActive   Boolean   @default(true)
 }
 
-model application{
-  id    String  @id   @default(uuid())
-  name  String
-  url   String
-  image String?
-  applicationPermissions     applicationpermission[]
-  description   String?
-  isActive  Boolean   @default(true)
-
-  createdBy String
-  updatedBy  String?
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+model application {
+  id                     String                  @id @default(uuid())
+  name                   String
+  url                    String
+  image                  String?
+  description            String?
+  isActive               Boolean                 @default(true)
+  createdBy              String
+  updatedBy              String?
+  createdAt              DateTime                @default(now())
+  updateAt               DateTime                @updatedAt
+  applicationPermissions applicationpermission[]
 }
 
-model supplier{
-  id    String  @id   @default(uuid())
-  name  String  @unique
-  email String
-  phone String
+model supplier {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  email     String
+  phone     String
   entityId  String
-  entity    entity    @relation(fields: [entityId], references: [id])
-  isActive  Boolean   @default(true)
-
+  isActive  Boolean  @default(true)
   createdBy String
-  updatedBy  String?
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  updatedBy String?
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  entity    entity   @relation(fields: [entityId], references: [id])
+
+  @@index([entityId], map: "supplier_entityId_fkey")
 }
 
-model article{
-  id          String    @id   @default(uuid())
-  name        String
-  price       Float     @default(0.0)
-  hasTVA      Boolean   @default(false)
-  type        ARTICLE_TYPE
-  idEntity    String    @unique
-  entity      entity    @relation(fields: [idEntity], references: [id])
-  isActive    Boolean   @default(true)
-  createdBy   String
-  updatedBy   String?
+model article {
+  id        String       @id @default(uuid())
+  name      String
+  price     Float        @default(0)
+  hasTVA    Boolean      @default(false)
+  type      ARTICLE_TYPE
+  idEntity  String
+  isActive  Boolean      @default(true)
+  createdBy String
+  updatedBy String?
+  createdAt DateTime     @default(now())
+  updateAt  DateTime     @updatedAt
+  entity    entity       @relation(fields: [idEntity], references: [id])
 
-  createdAt   DateTime  @default(now())
-  updateAt    DateTime  @updatedAt
+  @@index([idEntity], map: "article_idEntity_fkey")
 }
 
-model shift{
-  id    String  @id   @default(uuid())
-  name  String? @unique
-  startTime     String
-  endTime       String
-  entityId      String
-  entity        entity  @relation(fields: [entityId], references: [id])
-  isActive      Boolean @default(true)
-
+model shift {
+  id        String   @id @default(uuid())
+  name      String?  @unique
+  startTime String
+  endTime   String
+  entityId  String
+  isActive  Boolean  @default(true)
   createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  entity    entity   @relation(fields: [entityId], references: [id])
 
   @@unique([startTime, endTime])
+  @@index([entityId], map: "shift_entityId_fkey")
 }
 
-model department{
-  id    String    @id   @default(uuid())
-  name  String    
-  entityId        String
-  entity          entity @relation(fields: [entityId], references: [id])
-  services        service[]
-  isActive  Boolean @default(true)
-  
+model department {
+  id        String    @id @default(uuid())
+  name      String
+  entityId  String
+  isActive  Boolean   @default(true)
   createdBy String
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
+  entity    entity    @relation(fields: [entityId], references: [id])
+  services  service[]
+
+  @@index([entityId], map: "department_entityId_fkey")
 }
 
-model service{
-  id    String   @id    @default(uuid())
-  name  String
-  departmentId    String
-  department      department   @relation(fields: [departmentId], references: [id])
-  isActive  Boolean @default(true)
+model service {
+  id           String     @id @default(uuid())
+  name         String
+  departmentId String
+  isActive     Boolean    @default(true)
+  createdBy    String
+  createdAt    DateTime   @default(now())
+  updateAt     DateTime   @updatedAt
+  department   department @relation(fields: [departmentId], references: [id])
 
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  @@index([departmentId], map: "service_departmentId_fkey")
 }
 
-model bank{
-  id    String  @id      @default(uuid())
-  name  String  @unique
-  address       String
-  phone         String
+model bank {
+  id                String              @id @default(uuid())
+  name              String              @unique
+  address           String
+  phone             String
+  isActive          Boolean             @default(true)
+  createdBy         String
+  createdAt         DateTime            @default(now())
+  updateAt          DateTime            @updatedAt
   clientBankAccount clientbankaccount[]
   entityBankAccount entitybankaccount[]
-  isActive  Boolean @default(true)
-
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
 }
 
-model clientbankaccount{
-  id    String   @id  @default(uuid())
-  accountNumber  String
-  bankId    String
-  bank      bank    @relation(fields: [bankId], references: [id])
-  clientId  String
-  customer  customer  @relation(fields: [clientId], references: [id])
-  isActive  Boolean @default(true)
+model clientbankaccount {
+  id            String   @id @default(uuid())
+  accountNumber String
+  bankId        String
+  clientId      String
+  isActive      Boolean  @default(true)
+  createdBy     String
+  createdAt     DateTime @default(now())
+  updateAt      DateTime @updatedAt
+  bank          bank     @relation(fields: [bankId], references: [id])
+  customer      customer @relation(fields: [clientId], references: [id])
 
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  @@index([bankId], map: "clientbankaccount_bankId_fkey")
+  @@index([clientId], map: "clientbankaccount_clientId_fkey")
 }
 
-model entitybankaccount{
-  id    String   @id  @default(uuid())
-  accountNumber  String
-  bankId    String
-  bank      bank    @relation(fields: [bankId], references: [id])
-  entityId  String
-  entity    entity  @relation(fields: [entityId], references: [id])
-  isActive  Boolean @default(true)
+model entitybankaccount {
+  id            String   @id @default(uuid())
+  accountNumber String
+  bankId        String
+  entityId      String
+  isActive      Boolean  @default(true)
+  createdBy     String
+  createdAt     DateTime @default(now())
+  updateAt      DateTime @updatedAt
+  bank          bank     @relation(fields: [bankId], references: [id])
+  entity        entity   @relation(fields: [entityId], references: [id])
 
-  createdBy String
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @updatedAt
+  @@index([bankId], map: "entitybankaccount_bankId_fkey")
+  @@index([entityId], map: "entitybankaccount_entityId_fkey")
 }
 
-enum SITE_TYPE{
+/// This model has been renamed to 'Renamedfunction' during introspection, because the original name 'function' is reserved.
+model Renamedfunction {
+  id        String     @id
+  name      String     @unique(map: "Function_name_key")
+  isActive  Boolean    @default(true)
+  createdBy String
+  createdAt DateTime   @default(now())
+  updateAt  DateTime
+  employees employee[]
+
+  @@map("function")
+}
+
+enum SITE_TYPE {
   HEADQUARTER
   FIELD
 }
 
-enum ARTICLE_TYPE{
+enum ARTICLE_TYPE {
   PRODUCT
   EQUIPEMENT
 }
-

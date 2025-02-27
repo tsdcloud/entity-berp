@@ -41,7 +41,7 @@ export const getAllSuppliersService = async(body) =>{
                 entity:true
             },
             orderBy:{
-                createdAt:'desc'
+                name:'asc'
             }
         });
         const total = await supplierClient.count({
@@ -83,7 +83,7 @@ export const getSupplierByIdService = async(id) =>{
  * @returns 
  */
 export const getSuppliersByParams = async (request) =>{
-    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, ...queries } = request; 
+    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, search, ...queries } = request;
     const skip = (page - 1) * limit;
     try {
         let suppliers = await supplierClient.findMany({
@@ -91,7 +91,7 @@ export const getSuppliersByParams = async (request) =>{
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{
-                createdAt:'desc'
+                name:'asc'
             }
         });
         const total = await supplierClient.count({

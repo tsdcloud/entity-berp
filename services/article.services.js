@@ -38,7 +38,7 @@ export const getAllArticlesService = async(body) =>{
             // skip: parseInt(skip),
             // take: parseInt(LIMIT),
             orderBy:{
-                createdAt:'asc'
+                name:'asc'
             }
         });
         const total = await articleClient.count({
@@ -88,7 +88,7 @@ export const getArticlesByParams = async (request) =>{
             // skip: parseInt(skip),
             // take: parseInt(limit),
             orderBy:{
-                createdAt:'asc'
+                name:'asc'
             }
         });
         const total = await articleClient.count({
