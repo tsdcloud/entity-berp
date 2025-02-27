@@ -1,22 +1,22 @@
 import {prisma} from '../config/config.js';
-const supplierClient = prisma.supplier;
+const articleClient = prisma.article;
 
 
 const LIMIT = 100;
-const ORDER ="desc";
-const SORT_BY = "createdAt"
+const ORDER ="asc";
+const SORT_BY = "name"
 
 /**
- * Create a supplier
+ * Create article
  * @param body 
  * @returns 
  */
-export const createSupplierService = async (body)=>{
+export const createArticleService = async (body)=>{
     try {
-        let supplier = await supplierClient.create({
+        let article = await articleClient.create({
             data:body
         });
-        return supplier;
+        return article;
     } catch (error) {
         console.log(error);
         throw new Error(`${error}`);
@@ -25,33 +25,30 @@ export const createSupplierService = async (body)=>{
 
 
 /**
- * 
+ * Get all the articles
  * @returns 
  */
-export const getAllSuppliersService = async(body) =>{
+export const getAllArticlesService = async(body) =>{
     const page = 1;
     const skip = (page - 1) * LIMIT;
 
     try {
-        let suppliers = await supplierClient.findMany({
+        let articles = await articleClient.findMany({
             where:{isActive:true},
             // skip: parseInt(skip),
             // take: parseInt(LIMIT),
-            include:{
-                entity:true
-            },
             orderBy:{
-                createdAt:'desc'
+                createdAt:'asc'
             }
         });
-        const total = await supplierClient.count({
+        const total = await articleClient.count({
             where:{isActive:true}
-        });;
+        });
         return {
             // page: parseInt(page),
             // totalPages: Math.ceil(total / LIMIT),
             // total,
-            data: suppliers,
+            data: articles,
         };
     } catch (error) {
         console.log(error);
@@ -64,13 +61,13 @@ export const getAllSuppliersService = async(body) =>{
  * @param id 
  * @returns 
  */
-export const getSupplierByIdService = async(id) =>{
+export const getArticleByIdService = async(id) =>{
     try {
-        let supplier = await supplierClient.findFirst({
+        let article = await articleClient.findFirst({
             where:{id, isActive: true},
         });
-        if (!supplier) throw new Error(`No supplier found.`)
-        return supplier;
+        if (!article) throw new Error(`No article found.`)
+        return article;
     } catch (error) {
         console.log(error);
         throw new Error(`${error}`);
@@ -82,26 +79,26 @@ export const getSupplierByIdService = async(id) =>{
  * @param request 
  * @returns 
  */
-export const getSuppliersByParams = async (request) =>{
+export const getArticlesByParams = async (request) =>{
     const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, ...queries } = request; 
     const skip = (page - 1) * limit;
     try {
-        let suppliers = await supplierClient.findMany({
+        let articles = await articleClient.findMany({
             where:queries,
-            skip: parseInt(skip),
-            take: parseInt(limit),
+            // skip: parseInt(skip),
+            // take: parseInt(limit),
             orderBy:{
-                createdAt:'desc'
+                createdAt:'asc'
             }
         });
-        const total = await supplierClient.count({
+        const total = await articleClient.count({
             where:{isActive:true}
         });;
         return {
-            page: parseInt(page),
-            totalPages: Math.ceil(total / limit),
-            total,
-            data: suppliers,
+            // page: parseInt(page),
+            // totalPages: Math.ceil(total / limit),
+            // total,
+            data: articles,
         };
     } catch (error) {
         console.log(error);
@@ -115,13 +112,13 @@ export const getSuppliersByParams = async (request) =>{
  * @param body 
  * @returns 
  */
-export const updateSupplierService = async (id, body) =>{
+export const updateArticleService = async (id, body) =>{
     try {
-        let supplier = await supplierClient.update({
+        let article = await articleClient.update({
             where:{id},
             data:body
         });
-        return supplier;
+        return article;
     } catch (error) {
         console.log(error)
         throw new Error(`${error}`);
@@ -133,13 +130,13 @@ export const updateSupplierService = async (id, body) =>{
  * @param id 
  * @returns 
  */
-export const deleteSupplierService = async (id) =>{
+export const deleteArticleServices = async (id) =>{
     try {
-        let supplier = await supplierClient.update({
+        let article = await articleClient.update({
             where: {id},
             data:{isActive:false}
         });
-        return supplier
+        return article
     } catch (error) {
         console.log(error);
         throw new Error(`${error}`);

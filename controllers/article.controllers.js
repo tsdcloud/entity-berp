@@ -1,10 +1,10 @@
 import { 
-    createApplicationService, 
-    deleteApplicationServices, 
-    getAllApplicationsService, 
-    getApplicationByIdService, 
-    getApplicationsByParams, 
-    updateApplicationService } from "../services/application.services.js";
+    createArticleService, 
+    deleteArticleServices, 
+    getAllArticlesService, 
+    getArticleByIdService, 
+    getArticlesByParams, 
+    updateArticleService } from "../services/article.services.js";
 import HTTP_STATUS from "../utils/http.utils.js";
 
 
@@ -14,12 +14,12 @@ import HTTP_STATUS from "../utils/http.utils.js";
  * @param res 
  * @returns 
  */
-export const createApplicationController = async (req, res) => {
+export const createArticleController = async (req, res) => {
     try {
-        let bank = await createApplicationService(req.body);
+        let article = await createArticleService(req.body);
         res
         .status(HTTP_STATUS.CREATED.statusCode)
-        .send(bank);
+        .send(article);
         return;
     } catch (error) {
         console.log(error);
@@ -34,20 +34,18 @@ export const createApplicationController = async (req, res) => {
  * @param res 
  * @returns 
  */
-export const getApplicaitionByIdController = async (req, res) => {
+export const getArticleByIdController = async (req, res) => {
     let { id } = req.params;
-    console.log(id);
-
     if(!id){
         res.sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
         return;
     }
 
     try {
-        let application = await getApplicationByIdService(id);
+        let article = await getArticleByIdService(id);
         res
         .status(HTTP_STATUS.OK.statusCode)
-        .send(application)
+        .send(article)
         return;
     } catch (error) {
         console.log(error);
@@ -64,14 +62,14 @@ export const getApplicaitionByIdController = async (req, res) => {
  * @param res 
  * @returns 
  */
-export const getAllApplicationsController = async(req, res) => {
+export const getAllArticlesController = async(req, res) => {
     
     if(Object.keys(req.query).length !== 0 && req.query.constructor === Object){
         try {
-            let  applications = await getApplicationsByParams(req.query);
+            let  articles = await getArticlesByParams(req.query);
             res
             .status(HTTP_STATUS.OK.statusCode)
-            .send(applications)
+            .send(articles)
             return;
         } catch (error) {
           console.log(error);
@@ -81,10 +79,10 @@ export const getAllApplicationsController = async(req, res) => {
     }
 
     try {
-        let applications = await getAllApplicationsService(req.body);
+        let articles = await getAllArticlesService(req.body);
         res
         .status(HTTP_STATUS.OK.statusCode)
-        .send(applications)
+        .send(articles)
         return
     } catch (error) {
         console.log(error);
@@ -100,11 +98,11 @@ export const getAllApplicationsController = async(req, res) => {
  * @param req 
  * @param res 
  */
-export const updateApplicationController = async (req, res) => {
+export const updateArticleController = async (req, res) => {
     try {
-        let application = await updateApplicationService(req.params.id, req.body);
+        let article = await updateArticleService(req.params.id, req.body);
         res
-        .send(application)
+        .send(article)
         .status(HTTP_STATUS.OK.statusCode);
         return;
     } catch (error) {
@@ -121,12 +119,12 @@ export const updateApplicationController = async (req, res) => {
  * @param req 
  * @param res 
  */
-export const deleteApplicationController = async (req, res) => {
+export const deleteArticleController = async (req, res) => {
     try {
-        let application = await deleteApplicationServices(req.params.id);
+        let article = await deleteArticleServices(req.params.id);
         res
         .status(HTTP_STATUS.NO_CONTENT.statusCode)
-        .send(application)
+        .send(article)
         return;
     } catch (error) {
         console.log(error);

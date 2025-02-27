@@ -8,10 +8,10 @@ datasource db {
 }
 
 
-model Country{
+model country{
   id  String  @id @default(uuid())
   name  String    @unique
-  district District[]
+  district district[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -19,12 +19,12 @@ model Country{
   updatedAt DateTime  @updatedAt
 }
 
-model Town{
+model town{
   id    String  @id   @default(uuid())
   name  String
   districtId  String
-  district District @relation(fields: [districtId], references: [id])
-  entity   Entity[]
+  district district @relation(fields: [districtId], references: [id])
+  entity   entity[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -33,12 +33,12 @@ model Town{
   @@unique([name, districtId])
 }
 
-model District{
+model district{
   id    String  @id   @default(uuid())
   name  String
   countryId  String
-  country Country @relation(fields: [countryId], references: [id])
-  town    Town[]
+  country country @relation(fields: [countryId], references: [id])
+  town    town[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -47,12 +47,12 @@ model District{
   @@unique([name, countryId])
 }
 
-model Site{
+model site{
   id    String    @id   @default(uuid())
   name  String
   typeSite        SITE_TYPE   @default(FIELD)
   entityId        String
-  entity          Entity      @relation(fields: [entityId], references: [id])
+  entity          entity      @relation(fields: [entityId], references: [id])
   isActive  Boolean @default(true)
 
   createdBy String
@@ -61,12 +61,12 @@ model Site{
   @@unique([name, entityId])
 }
 
-model Customer{
+model customer{
   id    String  @id   @default(uuid())
   name  String  @unique
   email String
   phone   String
-  clientBankAccount  ClientBankAccount[]
+  clientBankAccount  clientbankaccount[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -74,10 +74,10 @@ model Customer{
   updateAt  DateTime  @updatedAt
 }
 
-model Grade{
+model grade{
   id    String  @id   @default(uuid())
   name  String  @unique
-  employees Employee[]
+  employees employee[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -85,10 +85,10 @@ model Grade{
   updateAt  DateTime  @updatedAt
 }
 
-model Echelon{
+model echelon{
   id    String   @id    @default(uuid())
   name  String   @unique
-  employees Employee[]
+  employees employee[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -96,10 +96,10 @@ model Echelon{
   updateAt  DateTime  @updatedAt
 }
 
-model Category{
+model category{
   id    String   @id    @default(uuid())
   name  String   @unique
-  employees Employee[]
+  employees employee[]
   isActive  Boolean @default(true)
   
   createdBy String
@@ -110,7 +110,7 @@ model Category{
 model Function{
   id    String  @id   @default(uuid())
   name  String  @unique
-  employees Employee[]
+  employees employee[]
   isActive  Boolean @default(true)
   
   createdBy String
@@ -118,19 +118,20 @@ model Function{
   updateAt  DateTime  @updatedAt
 }
 
-model Entity{
-  id    String   @id    @default(uuid())
-  name  String   @unique
+model entity{
+  id              String   @id    @default(uuid())
+  name            String   @unique
   localisation    String
-  phone     String
-  townId    String
-  towns     Town    @relation(fields: [townId], references: [id])
-  departements       Department[]
-  entityBankAccounts EntityBankAccount[]
-  shifts    Shift[]
-  suppliers Supplier[]
-  employees Employee[]
-  sites     Site[]
+  phone           String
+  townId          String
+  towns              town    @relation(fields: [townId], references: [id])
+  departements       department[]
+  entityBankAccounts entitybankaccount[]
+  shifts    shift[]
+  suppliers supplier[]
+  employees employee[]
+  sites     site[]
+  article   article[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -138,7 +139,7 @@ model Entity{
   updateAt  DateTime  @updatedAt
 }
 
-model Employee{
+model employee{
   id    String  @id   @default(uuid())
   email      String?  @unique
   phone      String?  @unique
@@ -147,17 +148,16 @@ model Employee{
   functionId String?
   function   Function?  @relation(fields: [functionId], references: [id])
   gradeId    String?
-  grade      Grade?     @relation(fields: [gradeId], references: [id])
+  grade      grade?     @relation(fields: [gradeId], references: [id])
   echelonId  String?
-  echelon    Echelon?   @relation(fields: [echelonId], references: [id])
+  echelon    echelon?   @relation(fields: [echelonId], references: [id])
   categoryId String?
-  category   Category?  @relation(fields: [categoryId], references: [id])
+  category   category?  @relation(fields: [categoryId], references: [id])
   userId     String     @unique
   entityId   String
-  entity     Entity    @relation(fields: [entityId], references: [id])
-  employeePermissions  EmployeePermission[]
-  employeeRoles   EmployeeRole[]
-
+  entity     entity    @relation(fields: [entityId], references: [id])
+  employeePermissions  employeepermission[]
+  employeeRoles   employeerole[]
   createdBy  String
   updatedBy  String?
 
@@ -166,12 +166,12 @@ model Employee{
   isActive   Boolean   @default(true)
 }
 
-model EmployeePermission{
+model employeepermission{
   id    String  @id         @default(uuid())
   employeeId    String
-  employee      Employee    @relation(fields: [employeeId], references: [id])
+  employee      employee    @relation(fields: [employeeId], references: [id])
   permissionId  String
-  permission    Permission  @relation(fields: [permissionId], references: [id])
+  permission    permission  @relation(fields: [permissionId], references: [id])
   isActive  Boolean   @default(true)
 
   createdBy String
@@ -180,12 +180,12 @@ model EmployeePermission{
   updateAt  DateTime  @updatedAt
 }
 
-model ApplicationPermission{
+model applicationpermission{
   id    String  @id         @default(uuid())
   applicationId    String
-  application      Application    @relation(fields: [applicationId], references: [id])
+  application      application    @relation(fields: [applicationId], references: [id])
   permissionId  String
-  permission    Permission  @relation(fields: [permissionId], references: [id])
+  permission    permission  @relation(fields: [permissionId], references: [id])
   isActive  Boolean   @default(true)
 
   createdBy String
@@ -194,12 +194,12 @@ model ApplicationPermission{
   updateAt  DateTime  @updatedAt
 }
 
-model EmployeeRole{
+model employeerole{
   id    String  @id       @default(uuid())
   employeeId    String
-  employee      Employee  @relation(fields: [employeeId], references: [id])
+  employee      employee  @relation(fields: [employeeId], references: [id])
   roleId        String
-  role          Role      @relation(fields: [roleId], references: [id])
+  role          role      @relation(fields: [roleId], references: [id])
   isActive  Boolean   @default(true)
 
   createdBy String
@@ -208,14 +208,14 @@ model EmployeeRole{
   updateAt  DateTime  @updatedAt
 }
 
-model   Permission{
+model   permission{
   id    String  @id   @default(uuid())
   permissionName      String
   displayName         String
   description         String?
-  employeePermissions  EmployeePermission[]
-  permissionRoles      PermissionRole[]
-  applicationPermissions     ApplicationPermission[]
+  employeePermissions  employeepermission[]
+  permissionRoles      permissionrole[]
+  applicationPermissions     applicationpermission[]
   createdBy  String
   updatedBy  String?
 
@@ -224,12 +224,12 @@ model   Permission{
   isActive   Boolean   @default(true)
 }
 
-model PermissionRole{
+model permissionrole{
   id    String    @id   @default(uuid())
   permissionId      String
-  permission        Permission    @relation(fields: [permissionId], references: [id])
+  permission        permission    @relation(fields: [permissionId], references: [id])
   roleId            String
-  role              Role          @relation(fields: [roleId], references: [id])
+  role              role          @relation(fields: [roleId], references: [id])
   isActive  Boolean   @default(true)
 
   createdBy String
@@ -238,13 +238,13 @@ model PermissionRole{
   updateAt  DateTime  @updatedAt
 }
 
-model Role{
+model role{
   id    String  @id   @default(uuid())
   roleName      String
   displayName   String
   description   String?
-  employeeRoles   EmployeeRole[]
-  permissionRoles PermissionRole[]
+  employeeRoles   employeerole[]
+  permissionRoles permissionrole[]
   createdBy  String
   updatedBy  String?
 
@@ -253,12 +253,12 @@ model Role{
   isActive   Boolean   @default(true)
 }
 
-model Application{
+model application{
   id    String  @id   @default(uuid())
   name  String
   url   String
   image String?
-  applicationPermissions     ApplicationPermission[]
+  applicationPermissions     applicationpermission[]
   description   String?
   isActive  Boolean   @default(true)
 
@@ -268,13 +268,13 @@ model Application{
   updateAt  DateTime  @updatedAt
 }
 
-model Supplier{
+model supplier{
   id    String  @id   @default(uuid())
   name  String  @unique
   email String
   phone String
   entityId  String
-  entity    Entity    @relation(fields: [entityId], references: [id])
+  entity    entity    @relation(fields: [entityId], references: [id])
   isActive  Boolean   @default(true)
 
   createdBy String
@@ -283,13 +283,29 @@ model Supplier{
   updateAt  DateTime  @updatedAt
 }
 
-model Shift{
+model article{
+  id          String    @id   @default(uuid())
+  name        String
+  price       Float     @default(0.0)
+  hasTVA      Boolean   @default(false)
+  type        ARTICLE_TYPE
+  idEntity    String    @unique
+  entity      entity    @relation(fields: [idEntity], references: [id])
+  isActive    Boolean   @default(true)
+  createdBy   String
+  updatedBy   String?
+
+  createdAt   DateTime  @default(now())
+  updateAt    DateTime  @updatedAt
+}
+
+model shift{
   id    String  @id   @default(uuid())
   name  String? @unique
   startTime     String
   endTime       String
   entityId      String
-  entity        Entity  @relation(fields: [entityId], references: [id])
+  entity        entity  @relation(fields: [entityId], references: [id])
   isActive      Boolean @default(true)
 
   createdBy String
@@ -299,12 +315,12 @@ model Shift{
   @@unique([startTime, endTime])
 }
 
-model Department{
+model department{
   id    String    @id   @default(uuid())
   name  String    
   entityId        String
-  entity          Entity @relation(fields: [entityId], references: [id])
-  services        Service[]
+  entity          entity @relation(fields: [entityId], references: [id])
+  services        service[]
   isActive  Boolean @default(true)
   
   createdBy String
@@ -312,11 +328,11 @@ model Department{
   updateAt  DateTime  @updatedAt
 }
 
-model Service{
+model service{
   id    String   @id    @default(uuid())
   name  String
   departmentId    String
-  department      Department   @relation(fields: [departmentId], references: [id])
+  department      department   @relation(fields: [departmentId], references: [id])
   isActive  Boolean @default(true)
 
   createdBy String
@@ -324,13 +340,13 @@ model Service{
   updateAt  DateTime  @updatedAt
 }
 
-model Bank{
+model bank{
   id    String  @id      @default(uuid())
   name  String  @unique
   address       String
   phone         String
-  clientBankAccount ClientBankAccount[]
-  entityBankAccount EntityBankAccount[]
+  clientBankAccount clientbankaccount[]
+  entityBankAccount entitybankaccount[]
   isActive  Boolean @default(true)
 
   createdBy String
@@ -338,13 +354,13 @@ model Bank{
   updateAt  DateTime  @updatedAt
 }
 
-model ClientBankAccount{
+model clientbankaccount{
   id    String   @id  @default(uuid())
   accountNumber  String
   bankId    String
-  bank      Bank    @relation(fields: [bankId], references: [id])
+  bank      bank    @relation(fields: [bankId], references: [id])
   clientId  String
-  customer  Customer  @relation(fields: [clientId], references: [id])
+  customer  customer  @relation(fields: [clientId], references: [id])
   isActive  Boolean @default(true)
 
   createdBy String
@@ -352,13 +368,13 @@ model ClientBankAccount{
   updateAt  DateTime  @updatedAt
 }
 
-model EntityBankAccount{
+model entitybankaccount{
   id    String   @id  @default(uuid())
   accountNumber  String
   bankId    String
-  bank      Bank    @relation(fields: [bankId], references: [id])
+  bank      bank    @relation(fields: [bankId], references: [id])
   entityId  String
-  entity    Entity  @relation(fields: [entityId], references: [id])
+  entity    entity  @relation(fields: [entityId], references: [id])
   isActive  Boolean @default(true)
 
   createdBy String
@@ -370,3 +386,9 @@ enum SITE_TYPE{
   HEADQUARTER
   FIELD
 }
+
+enum ARTICLE_TYPE{
+  PRODUCT
+  EQUIPEMENT
+}
+
