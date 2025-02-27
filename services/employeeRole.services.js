@@ -1,5 +1,5 @@
 import {prisma} from '../config/config.js';
-const employeeRoleClient = prisma.employeeRole;
+const employeeRoleClient = prisma.employeerole;
 
 
 const LIMIT = 100;

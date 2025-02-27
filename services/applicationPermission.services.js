@@ -1,5 +1,5 @@
 import {prisma} from '../config/config.js';
-const applicationPermissionClient = prisma.applicationPermission;
+const applicationPermissionClient = prisma.applicationpermission;
 
 
 const LIMIT = 100;

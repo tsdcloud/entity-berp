@@ -1,5 +1,5 @@
 import {prisma} from '../config/config.js';
-const entityBankAccountClient = prisma.entityBankAccount;
+const entityBankAccountClient = prisma.entitybankaccount;
 
 
 const LIMIT = 100;

@@ -4,7 +4,7 @@ import {
     getAllRolesService, 
     getRolesByParams, 
     getRoleByIdService, 
-    updateRoleService } from "../services/role.srevices.js";
+    updateRoleService } from "../services/role.services.js";
 import HTTP_STATUS from "../utils/http.utils.js";
 
 
