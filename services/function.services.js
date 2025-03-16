@@ -1,5 +1,5 @@
 import {prisma} from '../config/config.js';
-const functionClient = prisma.function;
+const functionClient = prisma.renamedfunction;
 
 
 const LIMIT = 100;

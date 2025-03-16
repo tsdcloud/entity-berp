@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 app.use(morgan("common"));
 app.use(verifyToken);
 // app.use(logger)
-app.use("/api/banks", bankRoutes);
+// app.use("/api/banks", bankRoutes);
 // app.use("/api/applications", applicationRoutes);
 app.use("/api/application-permissions", applicationPermissionRoutes);
 app.use("/api/articles", articleRoutes);

@@ -49,7 +49,7 @@ model district {
 
 model site {
   id        String    @id @default(uuid())
-  name      String
+  name      String    @unique
   typeSite  SITE_TYPE @default(FIELD)
   entityId  String
   isActive  Boolean   @default(true)
@@ -208,7 +208,7 @@ model employeerole {
 
 model permission {
   id                     String                  @id @default(uuid())
-  permissionName         String
+  permissionName         String                  
   displayName            String
   description            String?
   createdBy              String
@@ -300,9 +300,9 @@ model article {
 
 model shift {
   id        String   @id @default(uuid())
-  name      String?  @unique
-  startTime String
-  endTime   String
+  name      String?
+  startTime Decimal
+  endTime   Decimal
   entityId  String
   isActive  Boolean  @default(true)
   createdBy String
@@ -310,7 +310,7 @@ model shift {
   updateAt  DateTime @updatedAt
   entity    entity   @relation(fields: [entityId], references: [id])
 
-  @@unique([startTime, endTime])
+  @@unique([entityId, name])
   @@index([entityId], map: "shift_entityId_fkey")
 }
 
@@ -386,7 +386,7 @@ model entitybankaccount {
   @@index([entityId], map: "entitybankaccount_entityId_fkey")
 }
 
-/// This model has been renamed to 'Renamedfunction' during introspection, because the original name 'function' is reserved.
+
 model Renamedfunction {
   id        String     @id
   name      String     @unique(map: "Function_name_key")

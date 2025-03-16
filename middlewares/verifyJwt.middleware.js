@@ -1,4 +1,5 @@
 import { USERS_API } from "../config/config.js";
+import { getUserData } from "../utils/employees.utils.js";
 import HTTP_STATUS from '../utils/http.utils.js';
 import { jwtDecode } from "jwt-decode";
 
@@ -18,10 +19,16 @@ export const verifyToken = async (req, res, next) => {
           body: raw,
       };
     let result = fetch(`${USERS_API}token/verify/`, requestOptions);
+
     if((await result).status != 200){
-      throw new Error("Invalid user token")
+      res
+      .status(HTTP_STATUS.UN_AUTHORIZED.statusCode)
+      .json({error:true, errors:[{type:"token", msg:"Invalid or expired token"}]});
+      return 
     }
-    // req.body.userId = jwtDecode(token)?.user_id
+    
+    let user_info = await getUserData(req, res);
+    req["user"] = user_info;
     next();
   } catch (error) {
     console.error(error);
