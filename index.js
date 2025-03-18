@@ -6,7 +6,7 @@ import { verifyToken } from './middlewares/verifyJwt.middleware.js';
 const app = express();
 
 // Modules
-// import applicationRoutes from './routes/application.routes.js';
+import applicationRoutes from './routes/application.routes.js';
 import applicationPermissionRoutes from './routes/applicationPermission.routes.js';
 import articleRoutes from './routes/article.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
@@ -42,7 +42,7 @@ app.use(morgan("common"));
 app.use(verifyToken);
 // app.use(logger)
 app.use("/api/banks", bankRoutes);
-// app.use("/api/applications", applicationRoutes);
+app.use("/api/applications", applicationRoutes);
 app.use("/api/application-permissions", applicationPermissionRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/employees", employeeRoutes);
