@@ -301,8 +301,8 @@ model article {
 model shift {
   id        String   @id @default(uuid())
   name      String?
-  startTime Decimal
-  endTime   Decimal
+  startTime String
+  endTime   String
   entityId  String
   isActive  Boolean  @default(true)
   createdBy String
