@@ -5,24 +5,25 @@ import fs from 'fs';
 import fsPromises from 'fs/promises';
 import path from 'path';
 
-const logEvents = async (message, logName) => {
-    const dateTime = `${format(new Date(), 'yyyyMMdd\tHH:mm:ss')}`;
-    const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
 
+const logEvents = async (message, logName) => {
     try {
-        if (!fs.existsSync(path.join('..', 'logs'))) {
-            await fsPromises.mkdir(path.join('..', 'logs'));
+        const dateTime = format(new Date(), 'yyyyMMdd\tHH:mm:ss');
+        const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
+        const logsDir = path.join('logs');
+
+        if (!fs.existsSync(logsDir)) {
+            await fsPromises.mkdir(logsDir, { recursive: true });
         }
 
-        await fsPromises.appendFile(path.join('..', 'logs', logName), logItem);
+        await fsPromises.appendFile(path.join(logsDir, logName), logItem);
     } catch (err) {
-        console.log(err);
+        console.error('Error writing to log file:', err);
     }
-}
+};
 
 const logger = (req, res, next) => {
-    logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, 'logs.txt')
-    console.log(`${req.method}\t${req.url}\t${req.headers.origin}\t${req.body}`)
+    logEvents(`${req.method}\t${req.headers.origin}\t${req.url}\t${req.ip}`, 'logs.txt')
     next();
 }
 

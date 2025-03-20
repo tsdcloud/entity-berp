@@ -34,13 +34,14 @@ import townRoutes from './routes/town.routes.js';
 import siteRoutes from './routes/site.routes.js';
 import HTTP_STATUS from './utils/http.utils.js';
 import { errorHandler } from './middlewares/errorHandlers.js';
-// import { logger } from './middlewares/logEvents.js';
+import { logger } from './middlewares/logEvents.js';
 
+app.use(errorHandler);
+app.use(logger);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("common"));
-app.use(verifyToken);
-// app.use(logger)
+// app.use(verifyToken);
 app.use("/api/banks", bankRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/application-permissions", applicationPermissionRoutes);
@@ -75,7 +76,6 @@ app.use((req, res) => {
         .send(`<h1>404 Not Found</h1>`);
 });
 
-app.use(errorHandler);
 app.listen(process.env.PORT, ()=>{
     console.log(`Server listening on ${process.env.PORT}`)
 });

@@ -1,0 +1,2 @@
+20250320	10:31:58	8158ab10-ca4c-44f7-b1e0-d6e839992a2b	GET	undefined	/api/employees	::ffff:127.0.0.1
+20250320	10:32:01	bf47ed11-54a6-4717-bc79-0dd7e5c5240a	GET	undefined	/favicon.ico	::ffff:127.0.0.1
