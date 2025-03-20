@@ -2287,3 +2287,7 @@
 20250320	19:10:44	a0adf76c-7bf0-4929-a48e-88b7ac9f31e6	GET	http://localhost:5173	/api/categories	::ffff:127.0.0.1
 20250320	19:10:44	d71a5ecc-5b75-4729-93d9-dd74e52eea0b	GET	http://localhost:5173	/api/grades	::ffff:127.0.0.1
 20250320	19:10:44	057c01b6-afb2-4cf4-9cf5-d690686d049a	GET	http://localhost:5173	/api/entities	::ffff:127.0.0.1
+20250320	19:14:45	e9c41e0d-2e91-46bb-8b54-7e3107dcb0e7	OPTIONS	http://localhost:5173	/api/functions	::ffff:127.0.0.1
+20250320	19:14:45	f503b640-b712-4a32-8fa4-d8ddafc80d72	GET	http://localhost:5173	/api/functions	::ffff:127.0.0.1
+20250320	19:14:53	63d34b2d-ba3d-4cd4-b767-9c7596a6378e	OPTIONS	http://localhost:5173	/api/functions	::ffff:127.0.0.1
+20250320	19:14:53	3fbb1b77-70c9-42f4-969a-352146631103	POST	http://localhost:5173	/api/functions	::ffff:127.0.0.1

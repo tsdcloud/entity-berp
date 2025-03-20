@@ -388,7 +388,7 @@ model entitybankaccount {
 
 
 model Renamedfunction {
-  id        String     @id
+  id        String     @id    @default(uuid())
   name      String     @unique(map: "Function_name_key")
   isActive  Boolean    @default(true)
   createdBy String
