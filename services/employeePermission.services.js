@@ -92,7 +92,7 @@ export const getEmployeePermissionsByParams = async (request) =>{
     const skip = (page - 1) * limit;
     try {
         let employeePermissions = await employeePermissionClient.findMany({
-            where:queries,
+            where:{isActive: true, ...queries},
             include:{
                 employee: true,
                 permission:true
