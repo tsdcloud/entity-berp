@@ -143,6 +143,7 @@ export const updateEmployeePermissionService = async (id, body) =>{
  * @returns 
  */
 export const deleteEmployeePermissionServices = async (id) =>{
+
     try {
         let employeePermission = await employeePermissionClient.update({
             where: {id},

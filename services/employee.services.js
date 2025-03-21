@@ -100,11 +100,17 @@ export const getEmployeesByParams = async (request) =>{
             },
             include:{
                 employeePermissions:{
+                    where:{
+                        isActive:true
+                    },
                     include:{
                         permission:true
                     }
                 },
                 employeeRoles:{
+                    where:{
+                        isActive:true
+                    },
                     include:{
                         role:true
                     }
