@@ -112,7 +112,7 @@ export const getEmployeesByParams = async (request) =>{
                         isActive:true
                     },
                     include:{
-                        role:true
+                        role:true,
                     }
                 },
                 echelon:true,
