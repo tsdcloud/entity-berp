@@ -393,7 +393,7 @@ model Renamedfunction {
   isActive  Boolean    @default(true)
   createdBy String
   createdAt DateTime   @default(now())
-  updateAt  DateTime
+  updateAt  DateTime   @updatedAt
   employees employee[]
 
   @@map("function")

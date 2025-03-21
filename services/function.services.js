@@ -1,4 +1,7 @@
 import {prisma} from '../config/config.js';
+import { v4 as uuidv4 } from 'uuid';
+
+
 const functionClient = prisma.renamedfunction;
 
 
@@ -12,9 +15,10 @@ const SORT_BY = "createdAt"
  * @returns 
  */
 export const createFunctionService = async (body)=>{
+    
     try {
         let functions = await functionClient.create({
-            data:body
+            data:{id: uuidv4(), updateAt:new Date().toISOString(), ...body}
         });
         return functions;
     } catch (error) {
