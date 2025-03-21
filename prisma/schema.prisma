@@ -208,7 +208,7 @@ model employeerole {
 
 model permission {
   id                     String                  @id @default(uuid())
-  permissionName         String                  
+  permissionName         String
   displayName            String
   description            String?
   createdBy              String
@@ -301,8 +301,8 @@ model article {
 model shift {
   id        String   @id @default(uuid())
   name      String?
-  startTime String
-  endTime   String
+  startTime String   @db.VarChar(30)
+  endTime   String   @db.VarChar(30)
   entityId  String
   isActive  Boolean  @default(true)
   createdBy String
@@ -386,9 +386,8 @@ model entitybankaccount {
   @@index([entityId], map: "entitybankaccount_entityId_fkey")
 }
 
-
 model Renamedfunction {
-  id        String     @id    @default(uuid())
+  id        String     @id @default(uuid())
   name      String     @unique(map: "Function_name_key")
   isActive  Boolean    @default(true)
   createdBy String
