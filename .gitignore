@@ -5,3 +5,5 @@ uploads
 .vercel
 seeders
 migrations
+logs
+logs.txt

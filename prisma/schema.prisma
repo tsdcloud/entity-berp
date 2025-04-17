@@ -149,6 +149,7 @@ model employee {
   function      Renamedfunction? @relation(fields: [functionId], references: [id])
   grade         grade?           @relation(fields: [gradeId], references: [id])
   employeeRoles employeerole[]
+  employeePermissions employeepermission[]
 
   @@index([categoryId], map: "employee_categoryId_fkey")
   @@index([echelonId], map: "employee_echelonId_fkey")
@@ -157,16 +158,33 @@ model employee {
   @@index([gradeId], map: "employee_gradeId_fkey")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model employeepermission {
+
+// model employeepermission {
+//   id           String   @id @unique @default(uuid())
+//   employeeId   String
+//   permissionId String
+//   isActive     Boolean  @default(true)
+//   createdBy    String
+//   updatedBy    String?
+//   createdAt    DateTime @default(now())
+//   updateAt     DateTime @updatedAt
+
+//   @@ignore
+  
+// }
+
+model employeepermission{
   id           String   @id @unique @default(uuid())
   employeeId   String
   permissionId String
   isActive     Boolean  @default(true)
   createdBy    String
-  updatedBy    String?
+  updatedBy    String
   createdAt    DateTime @default(now())
   updateAt     DateTime @updatedAt
+
+  employee   employee? @relation(fields: [employeeId], references: [id])
+  permission       permission     @relation(fields: [permissionId], references: [id])
 }
 
 model applicationpermission {
@@ -210,6 +228,7 @@ model permission {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   isActive       Boolean  @default(true)
+  employeePermissions     employeepermission[]
 }
 
 model permissionrole {
