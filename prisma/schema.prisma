@@ -159,20 +159,6 @@ model employee {
 }
 
 
-// model employeepermission {
-//   id           String   @id @unique @default(uuid())
-//   employeeId   String
-//   permissionId String
-//   isActive     Boolean  @default(true)
-//   createdBy    String
-//   updatedBy    String?
-//   createdAt    DateTime @default(now())
-//   updateAt     DateTime @updatedAt
-
-//   @@ignore
-  
-// }
-
 model employeepermission{
   id           String   @id @unique @default(uuid())
   employeeId   String
@@ -217,7 +203,6 @@ model employeerole {
   @@index([roleId], map: "employeerole_roleId_fkey")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model permission {
   id             String   @id @unique @default(uuid())
   permissionName String
