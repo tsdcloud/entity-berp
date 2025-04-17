@@ -167,8 +167,6 @@ model employeepermission {
   updatedBy    String?
   createdAt    DateTime @default(now())
   updateAt     DateTime @updatedAt
-
-  @@ignore
 }
 
 model applicationpermission {
@@ -212,8 +210,6 @@ model permission {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   isActive       Boolean  @default(true)
-
-  @@ignore
 }
 
 model permissionrole {
