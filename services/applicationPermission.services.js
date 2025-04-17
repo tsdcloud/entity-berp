@@ -36,8 +36,8 @@ export const getAllApplicationPermissionsService = async(body) =>{
         let applicationPermissions = await applicationPermissionClient.findMany({
             where:{isActive:true},
             include:{
-                application: true,
-                permission: true
+                applicationId: true,
+                permissionId: true
             },
             skip: parseInt(skip),
             take: parseInt(LIMIT),
