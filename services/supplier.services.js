@@ -104,7 +104,7 @@ export const getSuppliersByParams = async (request) =>{
         });
         const total = await supplierClient.count({
             where:{isActive:true}
-        });;
+        });
         return {
             // page: parseInt(page),
             // totalPages: Math.ceil(total / limit),
