@@ -87,20 +87,28 @@ export const getSuppliersByParams = async (request) =>{
     const skip = (page - 1) * limit;
     try {
         let suppliers = await supplierClient.findMany({
-            where:queries,
-            skip: parseInt(skip),
-            take: parseInt(limit),
+            where:!search ? {...queries, isActive:true} : {
+                name:{
+                    contains:search
+                },
+                isActive:true
+            },
+            include:{
+                entity:true
+            },
+            // skip: parseInt(skip),
+            // take: parseInt(limit),
             orderBy:{
                 name:'asc'
             }
         });
         const total = await supplierClient.count({
             where:{isActive:true}
-        });;
+        });
         return {
-            page: parseInt(page),
-            totalPages: Math.ceil(total / limit),
-            total,
+            // page: parseInt(page),
+            // totalPages: Math.ceil(total / limit),
+            // total,
             data: suppliers,
         };
     } catch (error) {
