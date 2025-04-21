@@ -164,7 +164,7 @@ model employeepermission {
   permissionId String
   isActive     Boolean    @default(true)
   createdBy    String
-  updatedBy    String
+  updatedBy    String?
   createdAt    DateTime   @default(now())
   updateAt     DateTime   @updatedAt
   employee     employee   @relation(fields: [employeeId], references: [id])
