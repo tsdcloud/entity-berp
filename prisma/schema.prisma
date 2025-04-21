@@ -127,29 +127,29 @@ model entity {
 }
 
 model employee {
-  id            String           @id @unique @default(uuid())
-  email         String?          @unique
-  phone         String?          @unique
-  name          String?          @unique
-  picture       String?
-  functionId    String?
-  gradeId       String?
-  echelonId     String?
-  categoryId    String?
-  userId        String           @unique
-  entityId      String
-  createdBy     String
-  updatedBy     String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  isActive      Boolean          @default(true)
-  category      category?        @relation(fields: [categoryId], references: [id])
-  echelon       echelon?         @relation(fields: [echelonId], references: [id])
-  entity        entity           @relation(fields: [entityId], references: [id])
-  function      Renamedfunction? @relation(fields: [functionId], references: [id])
-  grade         grade?           @relation(fields: [gradeId], references: [id])
-  employeeRoles employeerole[]
+  id                  String               @id @unique @default(uuid())
+  email               String?              @unique
+  phone               String?              @unique
+  name                String?              @unique
+  picture             String?
+  functionId          String?
+  gradeId             String?
+  echelonId           String?
+  categoryId          String?
+  userId              String               @unique
+  entityId            String
+  createdBy           String
+  updatedBy           String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  isActive            Boolean              @default(true)
+  category            category?            @relation(fields: [categoryId], references: [id])
+  echelon             echelon?             @relation(fields: [echelonId], references: [id])
+  entity              entity               @relation(fields: [entityId], references: [id])
+  function            Renamedfunction?     @relation(fields: [functionId], references: [id])
+  grade               grade?               @relation(fields: [gradeId], references: [id])
   employeePermissions employeepermission[]
+  employeeRoles       employeerole[]
 
   @@index([categoryId], map: "employee_categoryId_fkey")
   @@index([echelonId], map: "employee_echelonId_fkey")
@@ -158,19 +158,20 @@ model employee {
   @@index([gradeId], map: "employee_gradeId_fkey")
 }
 
-
-model employeepermission{
-  id           String   @id @unique @default(uuid())
+model employeepermission {
+  id           String     @id @unique @default(uuid())
   employeeId   String
   permissionId String
-  isActive     Boolean  @default(true)
+  isActive     Boolean    @default(true)
   createdBy    String
   updatedBy    String
-  createdAt    DateTime @default(now())
-  updateAt     DateTime @updatedAt
+  createdAt    DateTime   @default(now())
+  updateAt     DateTime   @updatedAt
+  employee     employee   @relation(fields: [employeeId], references: [id])
+  permission   permission @relation(fields: [permissionId], references: [id])
 
-  employee   employee? @relation(fields: [employeeId], references: [id])
-  permission       permission     @relation(fields: [permissionId], references: [id])
+  @@index([employeeId], map: "employeepermission_employeeId_fkey")
+  @@index([permissionId], map: "employeepermission_permissionId_fkey")
 }
 
 model applicationpermission {
@@ -204,16 +205,16 @@ model employeerole {
 }
 
 model permission {
-  id             String   @id @unique @default(uuid())
-  permissionName String
-  displayName    String
-  description    String?
-  createdBy      String
-  updatedBy      String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  isActive       Boolean  @default(true)
-  employeePermissions     employeepermission[]
+  id                  String               @id @unique @default(uuid())
+  permissionName      String
+  displayName         String
+  description         String?
+  createdBy           String
+  updatedBy           String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  isActive            Boolean              @default(true)
+  employeePermissions employeepermission[]
 }
 
 model permissionrole {
