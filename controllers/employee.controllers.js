@@ -3,6 +3,8 @@ import {
     deleteEmployeeServices, 
     getAllEmployeesService, 
     getEmployeeByIdService, 
+    getEmployeePermissionsService, 
+    getEmployeeRolesService, 
     getEmployeesByParams, 
     updateEmployeeService } from "../services/employee.services.js";
 import HTTP_STATUS from "../utils/http.utils.js";
@@ -27,6 +29,7 @@ export const createEmployeeController = async (req, res) => {
         return
     }
 }
+
 
 /**
  * 
@@ -92,6 +95,66 @@ export const getAllEmployeesController = async(req, res) => {
     }
 }
 
+/**
+ * Returns the list of employee's roles
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+export const getEmployeeRolesController = async (req, res) =>{
+    try {
+        let {id} = req.params;
+
+        if(!id) {
+            res.
+            status(HTTP_STATUS.BAD_REQUEST.statusCode)
+            .send({
+                error:true,
+                error_list:[
+                    {message:'id is required', field:"id"}
+                ]
+            });
+            return;
+        }
+
+        let roles = await getEmployeeRolesService(id);
+        res.status(HTTP_STATUS.OK.statusCode).send(roles)
+
+    } catch (error) {
+        console.log(error);
+        res
+        .sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
+        return;
+    }
+}
+
+
+export const getEmployeePermissionsController = async (req, res) =>{
+    try {
+        let {id} = req.params;
+
+        if(!id) {
+            res.
+            status(HTTP_STATUS.BAD_REQUEST.statusCode)
+            .send({
+                error:true,
+                error_list:[
+                    {message:'id is required', field:"id"}
+                ]
+            });
+            return;
+        }
+
+        let permissions = await getEmployeePermissionsService(id);
+        res.status(HTTP_STATUS.OK.statusCode).send(permissions)
+
+    } catch (error) {
+        console.log(error);
+        res
+        .sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
+        return;
+    }
+}
 
 /**
  * 

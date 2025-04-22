@@ -18,8 +18,9 @@ export const verifyToken = async (req, res, next) => {
           body: raw,
       };
     let result = fetch(`${USERS_API}token/verify/`, requestOptions);
+
     if((await result).status != 200){
-      throw new Error("Invalid user token")
+      throw new Error("Invalid user token");
     }
 
 

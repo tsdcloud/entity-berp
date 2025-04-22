@@ -82,9 +82,9 @@ export const getEmployeeByIdService = async(id) =>{
 }
 
 /**
- * 
+ * Returns the employees' information based on params
  * @param request 
- * @returns 
+ * @returns employees[]
  */
 export const getEmployeesByParams = async (request) =>{
     const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, search, ...queries } = request; 
@@ -137,6 +137,64 @@ export const getEmployeesByParams = async (request) =>{
         throw new Error(`${error}`);
     }
 }
+
+
+
+/**
+ * Returns the employee's roles
+ * @param request 
+ * @returns data{roles:[]}
+ */
+export const getEmployeeRolesService = async (id) =>{
+    try {
+        let roles = await employeeClient.findMany({
+            where:{
+                id,
+                isActive:true
+            },
+            select:{
+                employeeRoles:{
+                    include:{
+                        role:true
+                    }
+                }
+            },
+        })
+
+        return roles[0]
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/**
+ * Returns the employee's permissions
+ * @param request 
+ * @returns data{roles:[]}
+ */
+export const getEmployeePermissionsService = async (id) =>{
+    try {
+        let permissions = await employeeClient.findMany({
+            where:{
+                id,
+                isActive:true
+            },
+            select:{
+                employeePermissions:{
+                    include:{
+                        permission:true
+                    }
+                }
+            }
+        })
+        
+        return permissions[0]
+    
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 /**
  * 
