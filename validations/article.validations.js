@@ -3,7 +3,7 @@ import { body, validationResult } from 'express-validator';
 export const createArticle = [
   body('name').notEmpty().withMessage('name is required'),
   body('price').notEmpty().withMessage('price is required'),
-  body('hasTVA').notEmpty().withMessage('hasTVA is required'),
+  body('hasTVA').notEmpty().optional().withMessage('hasTVA is required'),
   body('type').notEmpty().withMessage('hasTVA is required'),
   body('idEntity').notEmpty().withMessage('hasTVA is required'),
   (req, res, next) => {
