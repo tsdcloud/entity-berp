@@ -18,7 +18,7 @@ export const createDistrictController = async (req, res) => {
     try {
         let district = await createDistrictService(req.body);
         res
-        .status(HTTP_STATUS.CREATED.statusCode)
+        .status(district.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.CREATED.statusCode)
         .send(district);
         return;
     } catch (error) {
@@ -43,7 +43,7 @@ export const getDistrictByIdController = async (req, res) => {
     }
 
     try {
-        let district = await getEchelonByIdService(id);
+        let district = await getDistrictByIdService(id);
         res
         .status(HTTP_STATUS.OK.statusCode)
         .send(district)

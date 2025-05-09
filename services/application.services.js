@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import {apiErrorResponse} from '../utils/apiResponse.js'
 const applicationClient = prisma.application;
 
 
@@ -13,19 +14,33 @@ const SORT_BY = "createdAt"
  */
 export const createApplicationService = async (body)=>{
     try {
+        let { name, displayName } = body
+        let nameExist = await applicationClient.findFirst({
+            where:{name, isActive:true}
+        });
+
+        let displayNameExist = await applicationClient.findFirst({
+            where:{
+                displayName
+            }
+        });
+
+        if(!displayNameExist) return apiErrorResponse([{message:'display already attributed', field:'displayName'}])
+
+        if(nameExist) return apiErrorResponse([{message:'name already exist', field:'name'}])
         let application = await applicationClient.create({
             data:body
         });
         return application;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}])
     }
 }
 
 
 /**
- * 
+ * Get all applications
  * @returns 
  */
 export const getAllApplicationsService = async(body) =>{
@@ -52,12 +67,12 @@ export const getAllApplicationsService = async(body) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`)
+        return apiErrorResponse([{message:`${error}`, field:'server'}])
     }
 }
 
 /**
- * 
+ * Get application by id
  * @param id 
  * @returns 
  */
@@ -66,16 +81,16 @@ export const getApplicationByIdService = async(id) =>{
         let application = await applicationClient.findFirst({
             where:{id, isActive: true},
         });
-        if (!application) throw new Error(`No application found.`)
+        if (!application) return apiErrorResponse([{message:`applciation does not exist`, field:'id'}]);
         return application;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}])
     }
 }
 
 /**
- * 
+ * Get application by params
  * @param request 
  * @returns 
  */
@@ -102,43 +117,66 @@ export const getApplicationsByParams = async (request) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
 /**
- * 
+ * Update applcation
  * @param id 
  * @param body 
  * @returns 
  */
 export const updateApplicationService = async (id, body) =>{
     try {
+        let {name, displayName} = body;
+        if(name){
+            let nameExist = await applicationClient.findFirst({
+                where:{name, isActive:true}
+            });
+            if(nameExist) return apiErrorResponse([{message:`name already exist`, field:'name'}]);
+        }
+        
+        if(displayName){
+            let displayNameExist = await applicationClient.findFirst({
+                where:{displayName, isActive:true}
+            });
+            if(displayNameExist) return apiErrorResponse([{message:`display name already exist`, field:'name'}]);
+        }
         let application = await applicationClient.update({
-            where:{id},
+            where:{id, isActive:true},
             data:body
         });
         return application;
     } catch (error) {
         console.log(error)
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
 /**
- * 
+ * Delete application
  * @param id 
  * @returns 
  */
 export const deleteApplicationServices = async (id) =>{
     try {
+        let applicationExist = await applicationClient.findFirst({
+            where:{id, isActive:true}
+        });
+
+        if(!applicationExist) return apiErrorResponse([{message:`application does not exist`, field:'id'}]);
         let application = await applicationClient.update({
             where: {id},
-            data:{isActive:false}
+            data:{
+                name:`deleted_${applicationExist.name}_${new Date().toTimeString()}`, 
+                displayName:`deleted_${applicationExist.displayName}_${new Date().toTimeString()}`, 
+                isActive:false
+            }
         });
         return application
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}])
     }
 }

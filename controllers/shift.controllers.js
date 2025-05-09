@@ -64,7 +64,6 @@ export const getShiftByIdController = async (req, res) => {
  * @returns 
  */
 export const getAllShiftsController = async(req, res) => {
-    
     if(Object.keys(req.query).length !== 0 && req.query.constructor === Object){
         try {
             let shifts = await getShiftsByParams(req.query);

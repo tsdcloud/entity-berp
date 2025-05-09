@@ -1,9 +1,8 @@
 import { body, validationResult } from 'express-validator';
 
 export const createApplicationPermission = [
-  body('applicationId').notEmpty().withMessage('applicationId is required'),
-  body('permissionId').notEmpty().withMessage('permissionId is required'),
-  body('createdBy').notEmpty().withMessage('createdBy is required'),
+  body('applicationId').notEmpty().isUUID().withMessage('invalid applicationId'),
+  body('permissionId').notEmpty().isUUID().withMessage('invalid permissionId'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -14,9 +13,8 @@ export const createApplicationPermission = [
 ];
 
 export const updateApplicationPermission = [
-    body('applicationId').optional().notEmpty().withMessage('applicationId is required'),
-    body('permissionId').optional().notEmpty().withMessage('permissionId is required'),
-    body('createdBy').optional().notEmpty().withMessage('createdBy is required'),
+    body('applicationId').optional().isUUID().notEmpty().withMessage('invalid applicationId'),
+    body('permissionId').optional().isUUID().notEmpty().withMessage('invalid permissionId'),
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

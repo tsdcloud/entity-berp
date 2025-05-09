@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import { apiErrorResponse } from '../utils/apiResponse.js';
 const districtClient = prisma.district;
 
 
@@ -13,13 +14,32 @@ const SORT_BY = "createdAt"
  */
 export const createDistrictService = async (body)=>{
     try {
+        let {countryId, name} = body
+        let countryExist = await prisma.country.findFirst({
+            where:{id:countryId, isActive:true}
+        });
+
+        if(!countryExist) return apiErrorResponse([{message:'invalid country id', field:'countryId'}]);
+
+        // Check constraint
+        let associationExist = await districtClient.findFirst({
+            where:{
+                AND:{
+                    countryId,
+                    name
+                }
+            }
+        });
+
+        if(associationExist) return apiErrorResponse([{message:'country and district association already exist', field:"countryId, name"}])
         let district = await districtClient.create({
             data:body
         });
+
         return district;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:"server"}]);
     }
 }
 
@@ -55,7 +75,7 @@ export const getAllDistrictsService = async(body) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`)
+        return apiErrorResponse([{message:`${error}`, field:"server"}]);
     }
 }
 
@@ -72,16 +92,16 @@ export const getDistrictByIdService = async(id) =>{
                 country:true
             }
         });
-        if (!district) throw new Error(`No district found.`)
+        if (!district) return apiErrorResponse([{message:`district not found`, field:"server"}]);
         return district;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:"server"}]);
     }
 }
 
 /**
- * 
+ * Get district by params
  * @param request 
  * @returns 
  */
@@ -111,18 +131,41 @@ export const getDistrictsByParams = async (request) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:"server"}]);
     }
 }
 
 /**
- * 
+ * Update district
  * @param id 
  * @param body 
  * @returns 
  */
 export const updateDistrictService = async (id, body) =>{
     try {
+        let {countryId, name} = body
+        if(countryId){
+            let countryExist = await prisma.country.findFirst({
+                where:{id:countryId, isActive:true}
+            });
+    
+            if(!countryExist) return apiErrorResponse([{message:'invalid country id', field:'countryId'}]);
+        }
+
+        // Check constraint
+        if(name || countryId){
+            let associationExist = await districtClient.findFirst({
+                where:{
+                    AND:{
+                        countryId,
+                        name
+                    }
+                }
+            });
+    
+            if(associationExist) return apiErrorResponse([{message:'country and district association already exist', field:"countryId, name"}]);
+        }
+        
         let district = await districtClient.update({
             where:{id},
             data:body
@@ -130,24 +173,33 @@ export const updateDistrictService = async (id, body) =>{
         return district;
     } catch (error) {
         console.log(error)
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:"server"}]);
     }
 }
 
 /**
- * 
+ * delete district
  * @param id 
  * @returns 
  */
 export const deleteDistrictService = async (id) =>{
     try {
+        let selectedDistrict = await districtClient.findUnique({
+            where:{id, isActive:true}
+        });
+
+        if(!selectedDistrict) return apiErrorResponse([{message:'country not found', field:'id'}]);
+
         let district = await districtClient.update({
             where: {id},
-            data:{isActive:false}
+            data:{
+                isActive:false,
+                name: `deleted_${selectedDistrict.name}_${new Date().toTimeString()}`
+            }
         });
         return district
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:"server"}]);
     }
 }

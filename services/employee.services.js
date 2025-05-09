@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import { apiErrorResponse } from '../utils/apiResponse.js';
 const employeeClient = prisma.employee;
 
 
@@ -174,24 +175,26 @@ export const getEmployeeRolesService = async (id) =>{
  */
 export const getEmployeePermissionsService = async (id) =>{
     try {
-        let permissions = await employeeClient.findMany({
-            where:{
-                id,
-                isActive:true
-            },
-            select:{
+
+        // Get the permissions from employee        
+        let permissions = await employeeClient.findUnique({
+            where:{id, isActive:true},
+            include:{
                 employeePermissions:{
+                    where:{isActive:true},
                     include:{
                         permission:true
                     }
                 }
             }
-        })
-        
-        return permissions[0]
+        });
+
+       return permissions
+
     
     } catch (error) {
         console.log(error);
+        return apiErrorResponse([{message:`${error}`, field:'server'}])
     }
 }
 

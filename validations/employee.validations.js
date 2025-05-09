@@ -9,7 +9,6 @@ export const createEmployee = [
   body('categoryId').notEmpty().withMessage('categoryId is required'),
   body('userId').notEmpty().withMessage('userId is required'),
   body('entityId').notEmpty().withMessage('entityId is required'),
-  body('createdBy').notEmpty().withMessage('createdBy is required'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -28,7 +27,6 @@ export const updateEmployee = [
   body('categoryId').optional().notEmpty().withMessage('categoryId is required'),
   body('userId').optional().notEmpty().withMessage('userId is required'),
   body('entityId').optional().notEmpty().withMessage('entityId is required'),
-  body('createdBy').optional().notEmpty().withMessage('createdBy is required'),
   (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

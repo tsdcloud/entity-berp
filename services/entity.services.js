@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import {apiErrorResponse} from '../utils/apiResponse.js'
 const entityClient = prisma.entity;
 
 
@@ -13,13 +14,26 @@ const SORT_BY = "createdAt"
  */
 export const createEntityService = async (body)=>{
     try {
+        let {townId, name} = body;
+        // Check if the name already exist
+        let nameExist = await entityClient.findUnique({
+            where:{name}
+        });
+
+        if(nameExist) return apiErrorResponse([{message:'name already exist', field:'name'}]);
+        // Check if the town exist
+        let townExist = await prisma.town.findFirst({
+            where:{id:townId}
+        })
+        if(!townExist) return apiErrorResponse([{message:'town does not exist', field:'townId'}]);
+
         let entity = await entityClient.create({
             data:body
         });
         return entity;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
@@ -55,7 +69,7 @@ export const getAllEntitiesService = async(body) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`)
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
@@ -69,11 +83,11 @@ export const getEntityByIdService = async(id) =>{
         let entity = await entityClient.findFirst({
             where:{id, isActive: true},
         });
-        if (!functions) throw new Error(`No entity found.`)
+        if (!entity) return apiErrorResponse([{message:`entity not found`, field:'id'}]);
         return entity;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
@@ -105,18 +119,30 @@ export const getEntitiesByParams = async (request) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
 /**
- * 
+ * Update an entity
  * @param id 
  * @param body 
  * @returns 
  */
 export const updateEntityService = async (id, body) =>{
+    let  {name, townId} = body;
     try {
+        let nameExist = await entityClient.findFirst({
+            where:{name, isActive:true}
+        });
+        if(nameExist) return apiErrorResponse([{message:'name already exist', field:'name'}]);
+
+        let townExist = await prisma.town.findFirst({
+            where:{id:townId, isActive:true}
+        });
+
+        if(!townExist) return apiErrorResponse([{message:'town does not exist', field:'townId'}]);
+
         let entity = await entityClient.update({
             where:{id},
             data:body
@@ -124,24 +150,30 @@ export const updateEntityService = async (id, body) =>{
         return entity;
     } catch (error) {
         console.log(error)
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
 /**
- * 
+ * Delete entity
  * @param id 
  * @returns 
  */
 export const deleteEntityServices = async (id) =>{
     try {
-        let functions = await entityClient.update({
-            where: {id},
-            data:{isActive:false}
+        let selectedEntity = await entityClient.findFirst({
+            where:{
+                id, isActive:true
+            }
         });
-        return functions
+        if(!selectedEntity) return apiErrorResponse([{message:`entity does not exist`, field:'id'}]);
+        let entity = await entityClient.update({
+            where: {id},
+            data:{isActive:false, name:`deleted_${selectedEntity.name}_${new Date().toTimeString()}`}
+        });
+        return entity
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }

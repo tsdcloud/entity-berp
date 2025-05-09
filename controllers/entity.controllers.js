@@ -16,9 +16,10 @@ import HTTP_STATUS from "../utils/http.utils.js";
  */
 export const createEntityController = async (req, res) => {
     try {
+
         let entity = await createEntityService(req.body);
         res
-        .status(HTTP_STATUS.CREATED.statusCode)
+        .status(entity.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.CREATED.statusCode)
         .send(entity);
         return;
     } catch (error) {
@@ -36,17 +37,16 @@ export const createEntityController = async (req, res) => {
  */
 export const getEntityByIdController = async (req, res) => {
     let { id } = req.params;
-    console.log(id);
 
     if(!id){
-        res.sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
+        res.status(HTTP_STATUS.NOT_FOUND.statusCode).send(apiErrorResponse([{message:`id not provided`, field:'id'}]));
         return;
     }
 
     try {
         let entity = await getEntityByIdService(id);
         res
-        .status(HTTP_STATUS.OK.statusCode)
+        .status(entity.error ? HTTP_STATUS.NOT_FOUND.statusCode :HTTP_STATUS.OK.statusCode)
         .send(entity)
         return;
     } catch (error) {
@@ -70,7 +70,7 @@ export const getAllEntitiesController = async(req, res) => {
         try {
             let  entities = await getEntitiesByParams(req.query);
             res
-            .status(HTTP_STATUS.OK.statusCode)
+            .status(entities.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.OK.statusCode)
             .send(entities)
             return;
         } catch (error) {
@@ -83,7 +83,7 @@ export const getAllEntitiesController = async(req, res) => {
     try {
         let entities = await getAllEntitiesService(req.body);
         res
-        .status(HTTP_STATUS.OK.statusCode)
+        .status(entities.error ? HTTP_STATUS.BAD_REQUEST.statusCode :HTTP_STATUS.OK.statusCode)
         .send(entities)
         return
     } catch (error) {
@@ -96,7 +96,7 @@ export const getAllEntitiesController = async(req, res) => {
 
 
 /**
- * 
+ * Update entity controller
  * @param req 
  * @param res 
  */
@@ -104,8 +104,8 @@ export const updateEntityController = async (req, res) => {
     try {
         let entity = await updateEntityService(req.params.id, req.body);
         res
-        .send(entity)
-        .status(HTTP_STATUS.OK.statusCode);
+        .status(entity?.error ? HTTP_STATUS.BAD_REQUEST.statusCode :HTTP_STATUS.OK.statusCode)
+        .send(entity);
         return;
     } catch (error) {
         console.log(error);
@@ -117,7 +117,7 @@ export const updateEntityController = async (req, res) => {
 
 
 /**
- * 
+ * Delete entity controller
  * @param req 
  * @param res 
  */
@@ -125,7 +125,7 @@ export const deleteEntityController = async (req, res) => {
     try {
         let entity = await deleteEntityServices(req.params.id);
         res
-        .status(HTTP_STATUS.NO_CONTENT.statusCode)
+        .status(entity.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.NO_CONTENT.statusCode)
         .send(entity)
         return;
     } catch (error) {

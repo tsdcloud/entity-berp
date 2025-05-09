@@ -6,15 +6,15 @@ import {
     getApplicaitionByIdController, 
     updateApplicationController 
 } from "../controllers/application.controllers.js";
-import { createApplication, updateApplication } from '../validations/application.validations.js'
+import { createApplicationValidation, updateApplicationValidation } from '../validations/application.validations.js'
 
 const routes = Router();
 
 // routes.use('*', verifyToken)
 routes.get('/', getAllApplicationsController);
 routes.get('/:id', getApplicaitionByIdController);
-routes.post('/', createApplicationController);
-routes.patch('/:id',  updateApplicationController);
+routes.post('/', createApplicationValidation, createApplicationController);
+routes.patch('/:id', updateApplicationValidation,  updateApplicationController);
 routes.delete('/:id', deleteApplicationController);
 
 

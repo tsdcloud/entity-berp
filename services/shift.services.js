@@ -83,21 +83,25 @@ export const getShiftByIdService = async(id) =>{
  * @returns 
  */
 export const getShiftsByParams = async (request) =>{
-    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, ...queries } = request; 
+    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, search, ...queries } = request; 
     const skip = (page - 1) * limit;
+    console.log(search)
     try {
         let shifts = await shiftClient.findMany({
-            where:queries,
+            where:!search ? queries : {
+                name:{
+                    contains:search
+                },
+                isActive:true
+            },
             skip: parseInt(skip),
             take: parseInt(limit),
             orderBy:{
                 createdAt:'desc'
             }
         });
-        const total = await shiftClient.count({
-            where:{isActive:true}
-        });;
-        return {
+        const total = await shiftClient.count();
+        return search ? {data: shifts} :{
             page: parseInt(page),
             totalPages: Math.ceil(total / limit),
             total,

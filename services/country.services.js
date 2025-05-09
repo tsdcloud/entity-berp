@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import { apiErrorResponse, apiSuccessResponse } from '../utils/apiResponse.js';
 const countryClient = prisma.country;
 
 
@@ -13,22 +14,32 @@ const SORT_BY = "createdAt"
  */
 export const createCountryService = async (body)=>{
     try {
+        let {name} = body
+
+        let countryExist = await countryClient.findFirst({
+            where:{name, isActive:true}
+        });
+
+        if(countryExist) return apiErrorResponse([{message:'country already exist', field:'name'}])
         let country = await countryClient.create({
             data:body
         });
-        return country;
+        return apiSuccessResponse(country);
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{
+            message:`${error}`,
+            field:'server'
+        }])
     }
 }
 
 
 /**
- * 
+ * Get all countries
  * @returns 
  */
-export const getAllCountriesService = async(body) =>{
+export const getAllCountriesService = async() =>{
     const page = 1;
     const skip = (page - 1) * LIMIT;
 
@@ -57,7 +68,7 @@ export const getAllCountriesService = async(body) =>{
 }
 
 /**
- * 
+ * Get country by id
  * @param id 
  * @returns 
  */
@@ -66,16 +77,16 @@ export const getCountryByIdService = async(id) =>{
         let country = await countryClient.findFirst({
             where:{id, isActive: true},
         });
-        if (!country) throw new Error(`No country found.`)
+        if (!country) return apiErrorResponse([{message:'country not found', field:'id'}]);
         return country;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
 /**
- * 
+ * Get country by params
  * @param request 
  * @returns 
  */
@@ -102,12 +113,12 @@ export const getCountryByParams = async (request) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, fields:'server'}])
     }
 }
 
 /**
- * 
+ * Update country
  * @param id 
  * @param body 
  * @returns 
@@ -115,13 +126,15 @@ export const getCountryByParams = async (request) =>{
 export const updateCountryService = async (id, body) =>{
     try {
         let country = await countryClient.update({
-            where:{id},
+            where:{id, isActive:true},
             data:body
         });
+        
+        if(!country) return apiErrorResponse([{messgae:'country not found', field:'id'}]);
         return country;
     } catch (error) {
         console.log(error)
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }
 
@@ -132,16 +145,21 @@ export const updateCountryService = async (id, body) =>{
  */
 export const deleteCountryServices = async (id) =>{
     try {
-        // let country = await consommableClient.update({
-        //     where: {id},
-        //     data:{isActive:false}
-        // });
-        let country = await countryClient.delete({
-            where: {id}
+        let countryExist = await countryClient.findUnique({
+            where:{id, isActive:true}
+        });
+
+        if(!countryExist) return apiErrorResponse([{message:'country not found', field:'server'}]);
+        let country = await countryClient.update({
+            where: {id}, 
+            data:{
+                isActive:false,
+                name:`deleted_${countryExist.name}_${new Date().toTimeString()}`
+            }
         });
         return country
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}]);
     }
 }

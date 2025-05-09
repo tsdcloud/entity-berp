@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import {apiErrorResponse} from '../utils/apiResponse.js'
 const permissionRoleClient = prisma.permissionrole;
 
 

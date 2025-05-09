@@ -18,7 +18,7 @@ export const createCountryController = async (req, res) => {
     try {
         let country = await createCountryService(req.body);
         res
-        .status(HTTP_STATUS.CREATED.statusCode)
+        .status(country.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.CREATED.statusCode)
         .send(country);
         return;
     } catch (error) {

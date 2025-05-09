@@ -7,6 +7,7 @@ import {
     getEmployeeRolesService, 
     getEmployeesByParams, 
     updateEmployeeService } from "../services/employee.services.js";
+import {apiErrorResponse} from '../utils/apiResponse.js'
 import HTTP_STATUS from "../utils/http.utils.js";
 
 
@@ -134,24 +135,22 @@ export const getEmployeePermissionsController = async (req, res) =>{
         let {id} = req.params;
 
         if(!id) {
-            res.
-            status(HTTP_STATUS.BAD_REQUEST.statusCode)
-            .send({
-                error:true,
-                error_list:[
-                    {message:'id is required', field:"id"}
-                ]
-            });
+            res
+            .status(HTTP_STATUS.BAD_REQUEST.statusCode)
+            .send(apiErrorResponse([{message:'id not provided', field:'id'}]));
             return;
         }
 
         let permissions = await getEmployeePermissionsService(id);
-        res.status(HTTP_STATUS.OK.statusCode).send(permissions)
+        res
+        .status(permissions.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.OK.statusCode)
+        .send(permissions);
 
     } catch (error) {
         console.log(error);
         res
-        .sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
+        .status(HTTP_STATUS.SERVEUR_ERROR.statusCode)
+        .send(apiErrorResponse([{message:`${error}`, field:'server'}]));
         return;
     }
 }

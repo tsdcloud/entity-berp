@@ -2,7 +2,9 @@ import express from 'express'
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import cors from 'cors';
-import { verifyToken } from './middlewares/verifyJwt.middleware.js';
+import { verifyJWT } from './middlewares/verifyJwt.middleware.js';
+import xss from 'xss-clean';
+import helmet from 'helmet';
 const app = express();
 
 // Modules
@@ -29,7 +31,7 @@ import entityBankAccountRoutes from './routes/entityBankAccount.routes.js';
 import functionRoutes from './routes/function.routes.js';
 import gradeRoutes from './routes/grade.routes.js';
 import serviceRoutes from './routes/service.routes.js';
-import shiftRoutes from './routes/shift.controllers.js';
+import shiftRoutes from './routes/shift.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
 import townRoutes from './routes/town.routes.js';
 import siteRoutes from './routes/site.routes.js';
@@ -42,7 +44,10 @@ app.use(logger);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("common"));
-// app.use(verifyToken);
+app.use(verifyJWT);
+app.use(helmet())
+app.use(xss())
+
 app.use("/api/banks", bankRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/application-permissions", applicationPermissionRoutes);

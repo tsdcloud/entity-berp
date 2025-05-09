@@ -8,67 +8,74 @@ datasource db {
 }
 
 model country {
-  id        String     @id @unique @default(uuid())
+  id        String     @id  @default(uuid())
   name      String     @unique
+  displayName   String?
   isActive  Boolean    @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   district  district[]
 }
 
 model town {
-  id         String   @id @unique @default(uuid())
+  id         String   @id  @default(uuid())
   name       String
+  displayName String?
   districtId String
   isActive   Boolean  @default(true)
   createdBy  String
+  updatedBy  String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   entity     entity[]
   district   district @relation(fields: [districtId], references: [id])
 
   @@unique([name, districtId])
-  @@index([districtId], map: "town_districtId_fkey")
 }
 
 model district {
   id        String   @id @unique @default(uuid())
-  name      String
+  name      String   @unique
+  displayName  String?
   countryId String
   isActive  Boolean  @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   country   country  @relation(fields: [countryId], references: [id])
   town      town[]
 
   @@unique([name, countryId])
-  @@index([countryId], map: "district_countryId_fkey")
 }
 
 model site {
   id        String    @id @unique @default(uuid())
-  name      String
+  name      String    @unique
+  displayName   String?
   typeSite  SITE_TYPE @default(FIELD)
   entityId  String
   isActive  Boolean   @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
   entity    entity    @relation(fields: [entityId], references: [id])
 
   @@unique([name, entityId])
-  @@index([entityId], map: "site_entityId_fkey")
 }
 
 model customer {
   id                String              @id @unique @default(uuid())
   name              String              @unique
+  displayName       String?
   email             String
   phone             String
   isActive          Boolean             @default(true)
   createdBy         String
+  updatedBy         String?
   createdAt         DateTime            @default(now())
   updateAt          DateTime            @updatedAt
   clientBankAccount clientbankaccount[]
@@ -77,8 +84,10 @@ model customer {
 model grade {
   id        String     @id @unique @default(uuid())
   name      String     @unique
+  displayName   String?
   isActive  Boolean    @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime   @default(now())
   updateAt  DateTime   @updatedAt
   employees employee[]
@@ -87,8 +96,10 @@ model grade {
 model echelon {
   id        String     @id @unique @default(uuid())
   name      String     @unique
+  displayName   String?
   isActive  Boolean    @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime   @default(now())
   updateAt  DateTime   @updatedAt
   employees employee[]
@@ -97,8 +108,10 @@ model echelon {
 model category {
   id        String     @id @unique @default(uuid())
   name      String     @unique
+  displayName   String?
   isActive  Boolean    @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime   @default(now())
   updateAt  DateTime   @updatedAt
   employees employee[]
@@ -107,11 +120,13 @@ model category {
 model entity {
   id                 String              @id @unique @default(uuid())
   name               String              @unique
+  displayName        String?
   localisation       String
   phone              String
   townId             String
   isActive           Boolean             @default(true)
   createdBy          String
+  updatedBy          String?
   createdAt          DateTime            @default(now())
   updateAt           DateTime            @updatedAt
   article            article[]
@@ -122,8 +137,6 @@ model entity {
   shifts             shift[]
   sites              site[]
   suppliers          supplier[]
-
-  @@index([townId], map: "entity_townId_fkey")
 }
 
 model employee {
@@ -150,12 +163,6 @@ model employee {
   grade               grade?               @relation(fields: [gradeId], references: [id])
   employeePermissions employeepermission[]
   employeeRoles       employeerole[]
-
-  @@index([categoryId], map: "employee_categoryId_fkey")
-  @@index([echelonId], map: "employee_echelonId_fkey")
-  @@index([entityId], map: "employee_entityId_fkey")
-  @@index([functionId], map: "employee_functionId_fkey")
-  @@index([gradeId], map: "employee_gradeId_fkey")
 }
 
 model employeepermission {
@@ -169,9 +176,6 @@ model employeepermission {
   updateAt     DateTime   @updatedAt
   employee     employee   @relation(fields: [employeeId], references: [id])
   permission   permission @relation(fields: [permissionId], references: [id])
-
-  @@index([employeeId], map: "employeepermission_employeeId_fkey")
-  @@index([permissionId], map: "employeepermission_permissionId_fkey")
 }
 
 model applicationpermission {
@@ -183,9 +187,6 @@ model applicationpermission {
   updatedBy     String?
   createdAt     DateTime @default(now())
   updateAt      DateTime @updatedAt
-
-  @@index([applicationId], map: "applicationpermission_applicationId_fkey")
-  @@index([permissionId], map: "applicationpermission_permissionId_fkey")
 }
 
 model employeerole {
@@ -199,15 +200,12 @@ model employeerole {
   updateAt   DateTime @updatedAt
   employee   employee @relation(fields: [employeeId], references: [id])
   role       role     @relation(fields: [roleId], references: [id])
-
-  @@index([employeeId], map: "employeerole_employeeId_fkey")
-  @@index([roleId], map: "employeerole_roleId_fkey")
 }
 
 model permission {
   id                  String               @id @unique @default(uuid())
   permissionName      String
-  displayName         String
+  displayName         String?
   description         String?
   createdBy           String
   updatedBy           String?
@@ -215,26 +213,26 @@ model permission {
   updatedAt           DateTime             @updatedAt
   isActive            Boolean              @default(true)
   employeePermissions employeepermission[]
+  permissions         permissionrole[]
 }
 
 model permissionrole {
-  id           String   @id @unique @default(uuid())
+  id           String       @id @unique @default(uuid())
   permissionId String
+  permission   permission   @relation(references: [id], fields: [permissionId])
   roleId       String
-  isActive     Boolean  @default(true)
+  role         role         @relation(references: [id], fields: [roleId])
+  isActive     Boolean      @default(true)
   createdBy    String
   updatedBy    String?
   createdAt    DateTime @default(now())
   updateAt     DateTime @updatedAt
-
-  @@index([permissionId], map: "permissionrole_permissionId_fkey")
-  @@index([roleId], map: "permissionrole_roleId_fkey")
 }
 
 model role {
   id            String         @id @unique @default(uuid())
   roleName      String
-  displayName   String
+  displayName   String?
   description   String?
   createdBy     String
   updatedBy     String?
@@ -242,11 +240,13 @@ model role {
   updatedAt     DateTime       @updatedAt
   isActive      Boolean        @default(true)
   employeeRoles employeerole[]
+  permissionroles   permissionrole[]
 }
 
 model application {
   id          String   @id @unique @default(uuid())
-  name        String
+  name        String   @unique
+  displayName String?  @unique
   url         String
   image       String?
   description String?
@@ -260,6 +260,7 @@ model application {
 model supplier {
   id        String   @id @unique @default(uuid())
   name      String   @unique
+  displayName   String?   @unique
   email     String
   phone     String
   entityId  String
@@ -269,14 +270,14 @@ model supplier {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   entity    entity   @relation(fields: [entityId], references: [id])
-
-  @@index([entityId], map: "supplier_entityId_fkey")
 }
 
 model article {
   id              String          @id @unique @default(uuid())
   name            String
+  displayName     String?
   price           Float           @default(0)
+  quantity        Float           @default(0)
   hasTVA          Boolean         @default(false)
   type            ARTICLE_TYPE
   idEntity        String
@@ -289,14 +290,12 @@ model article {
   code            String?
   articleFamilyId article_family? @relation(fields: [idArticleFamily], references: [id])
   entity          entity          @relation(fields: [idEntity], references: [id])
-
-  @@index([idEntity], map: "article_idEntity_fkey")
-  @@index([idArticleFamily], map: "article_idArticleFamily_fkey")
 }
 
 model article_family {
   id          String    @id @unique @default(uuid())
   name        String
+  displayName String?
   code        String
   description String?
   isActive    Boolean   @default(true)
@@ -315,48 +314,50 @@ model shift {
   entityId  String
   isActive  Boolean  @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   entity    entity   @relation(fields: [entityId], references: [id])
 
   @@unique([startTime, endTime])
-  @@index([entityId], map: "shift_entityId_fkey")
 }
 
 model department {
   id        String    @id @unique @default(uuid())
   name      String
+  displayName   String?   @unique
   entityId  String
   isActive  Boolean   @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime  @default(now())
   updateAt  DateTime  @updatedAt
   entity    entity    @relation(fields: [entityId], references: [id])
   services  service[]
-
-  @@index([entityId], map: "department_entityId_fkey")
 }
 
 model service {
   id           String     @id @unique @default(uuid())
   name         String
+  displayName  String?
   departmentId String
   isActive     Boolean    @default(true)
   createdBy    String
+  updatedBy    String?
   createdAt    DateTime   @default(now())
   updateAt     DateTime   @updatedAt
   department   department @relation(fields: [departmentId], references: [id])
-
-  @@index([departmentId], map: "service_departmentId_fkey")
 }
 
 model bank {
   id                String              @id @unique @default(uuid())
   name              String              @unique
+  displayName       String?
   address           String
   phone             String
   isActive          Boolean             @default(true)
   createdBy         String
+  updatedBy         String?
   createdAt         DateTime            @default(now())
   updateAt          DateTime            @updatedAt
   clientBankAccount clientbankaccount[]
@@ -370,13 +371,11 @@ model clientbankaccount {
   clientId      String
   isActive      Boolean  @default(true)
   createdBy     String
+  updatedBy     String?
   createdAt     DateTime @default(now())
   updateAt      DateTime @updatedAt
   bank          bank     @relation(fields: [bankId], references: [id])
   customer      customer @relation(fields: [clientId], references: [id])
-
-  @@index([bankId], map: "clientbankaccount_bankId_fkey")
-  @@index([clientId], map: "clientbankaccount_clientId_fkey")
 }
 
 model entitybankaccount {
@@ -386,20 +385,20 @@ model entitybankaccount {
   entityId      String
   isActive      Boolean  @default(true)
   createdBy     String
+  updatedBy     String?
   createdAt     DateTime @default(now())
   updateAt      DateTime @updatedAt
   bank          bank     @relation(fields: [bankId], references: [id])
   entity        entity   @relation(fields: [entityId], references: [id])
-
-  @@index([bankId], map: "entitybankaccount_bankId_fkey")
-  @@index([entityId], map: "entitybankaccount_entityId_fkey")
 }
 
 model Renamedfunction {
   id        String     @id @unique @default(uuid())
   name      String     @unique(map: "Function_name_key")
+  displayName   String?
   isActive  Boolean    @default(true)
   createdBy String
+  updatedBy String?
   createdAt DateTime   @default(now())
   updateAt  DateTime   @updatedAt
   employees employee[]

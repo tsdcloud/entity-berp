@@ -1,4 +1,5 @@
 import {prisma} from '../config/config.js';
+import {apiErrorResponse} from '../utils/apiResponse.js'
 const townClient = prisma.town;
 
 
@@ -12,6 +13,25 @@ const SORT_BY = "createdAt"
  * @returns 
  */
 export const createTownService = async (body)=>{
+    let {name, districtId} = body;
+    
+     // check if district exist
+    let districtExist = await prisma.district.findFirst({
+        where:{id:districtId, isActive:true}
+    });
+    if(!districtExist) return apiErrorResponse([{message:'district not found', field:'districtId'}])
+    
+        // Check association
+    let associationExist = await townClient.findFirst({
+        where:{
+            AND:{
+                name,
+                districtId
+            }
+        }
+    });
+    if(associationExist) return apiErrorResponse([{message:'town already belongs to district', field:'name, districtId'}])
+
     try {
         let town = await townClient.create({
             data:body
@@ -19,7 +39,7 @@ export const createTownService = async (body)=>{
         return town;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'server'}])
     }
 }
 
@@ -55,7 +75,7 @@ export const getAllTownsService = async(body) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`)
+        return apiErrorResponse([{message:`${error}`, field:'name'}])
     }
 }
 
@@ -73,7 +93,7 @@ export const getTownByIdService = async(id) =>{
         return town;
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'name'}])
     }
 }
 
@@ -108,7 +128,7 @@ export const getTownsByParams = async (request) =>{
         };
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'name'}])
     }
 }
 
@@ -120,6 +140,27 @@ export const getTownsByParams = async (request) =>{
  */
 export const updateTownService = async (id, body) =>{
     try {
+        let {name, districtId} = body;
+    
+        // check if district exist
+        let districtExist = await prisma.district.findFirst({
+            where:{id:districtId, isActive:true}
+        });
+        if(!districtExist) return apiErrorResponse([{message:'district not found', field:'districtId'}])
+        
+        if(name && districtId){
+            // Check association
+            let associationExist = await townClient.findFirst({
+                where:{
+                    AND:{
+                        name,
+                        districtId
+                    }
+                }
+            });
+            if(associationExist) return apiErrorResponse([{message:'town already belongs to district', field:'name, districtId'}]);
+        }
+
         let town = await townClient.update({
             where:{id},
             data:body
@@ -127,27 +168,35 @@ export const updateTownService = async (id, body) =>{
         return town;
     } catch (error) {
         console.log(error)
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'name'}])
     }
 }
 
 /**
- * 
+ * Delete town
  * @param id 
  * @returns 
  */
 export const deleteTownService = async (id) =>{
     try {
+        let townExist = await townClient.findFirst({
+            where:{
+                id, 
+                isActive:true
+            }
+        });
+
+        if(!townExist) return apiErrorResponse([{message:`town does not exist`, field:'name'}])
         let town = await townClient.update({
             where: {id},
-            data:{isActive:false}
+            data:{
+                isActive:false, 
+                name: `deleted_${townExist.name}_${new Date().toTimeString()}`
+            }
         });
-        // let town = await townClient.delete({
-        //     where: {id}
-        // });
         return town
     } catch (error) {
         console.log(error);
-        throw new Error(`${error}`);
+        return apiErrorResponse([{message:`${error}`, field:'name'}])
     }
 }

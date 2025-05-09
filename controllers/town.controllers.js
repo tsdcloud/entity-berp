@@ -18,7 +18,7 @@ export const createTownController = async (req, res) => {
     try {
         let town = await createTownService(req.body);
         res
-        .status(HTTP_STATUS.CREATED.statusCode)
+        .status(town.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.CREATED.statusCode)
         .send(town);
         return;
     } catch (error) {
@@ -103,7 +103,7 @@ export const updateTownController = async (req, res) => {
     try {
         let town = await updateTownService(req.params.id, req.body);
         res
-        .status(HTTP_STATUS.OK.statusCode)
+        .status(town.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.OK.statusCode)
         .send(town);
         return;
     } catch (error) {
@@ -124,7 +124,7 @@ export const deleteTownController = async (req, res) => {
     try {
         let town = await deleteTownService(req.params.id);
         res
-        .status(HTTP_STATUS.NO_CONTENT.statusCode)
+        .status(town.error ? HTTP_STATUS.BAD_REQUEST.statusCode : HTTP_STATUS.NO_CONTENT.statusCode)
         .send(town)
         return;
     } catch (error) {

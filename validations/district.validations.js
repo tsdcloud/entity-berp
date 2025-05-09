@@ -1,4 +1,6 @@
 import { body, validationResult } from 'express-validator';
+import HTTP_STATUS from '../utils/http.utils.js';
+import {apiErrorResponse} from '../utils/apiResponse.js'
 
 export const createDistrict = [
   body('name').notEmpty().withMessage('name is required'),
@@ -7,7 +9,7 @@ export const createDistrict = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(HTTP_STATUS.BAD_REQUEST.statusCode).send(apiErrorResponse(errors.array()));
     }
     next();
   }
@@ -20,7 +22,7 @@ export const updateDistrict = [
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(HTTP_STATUS.BAD_REQUEST.statusCode).send(apiErrorResponse(errors.array()));
       }
       next();
     }
