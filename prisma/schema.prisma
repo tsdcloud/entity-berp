@@ -141,15 +141,15 @@ model entity {
 
 model employee {
   id                  String               @id @unique @default(uuid())
-  email               String?              @unique
-  phone               String?              @unique
-  name                String?              @unique
+  email               String?
+  phone               String?
+  name                String?
   picture             String?
   functionId          String?
   gradeId             String?
   echelonId           String?
   categoryId          String?
-  userId              String               @unique
+  userId              String
   entityId            String
   createdBy           String
   updatedBy           String?

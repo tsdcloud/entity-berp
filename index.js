@@ -5,6 +5,7 @@ import cors from 'cors';
 import { verifyJWT } from './middlewares/verifyJwt.middleware.js';
 import xss from 'xss-clean';
 import helmet from 'helmet';
+import * as Sentry from "@sentry/node";
 const app = express();
 
 // Modules
@@ -39,11 +40,18 @@ import HTTP_STATUS from './utils/http.utils.js';
 import { errorHandler } from './middlewares/errorHandlers.js';
 import { logger } from './middlewares/logEvents.js';
 
+
+Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+});
+
+
 app.use(errorHandler);
 app.use(logger);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("common"));
+app.get("/debug-sentry", function mainHandler(req, res) { throw new Error("My first Sentry error!"); });
 app.use(verifyJWT);
 app.use(helmet())
 app.use(xss())
