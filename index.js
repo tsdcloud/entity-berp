@@ -5,8 +5,12 @@ import cors from 'cors';
 import { verifyJWT } from './middlewares/verifyJwt.middleware.js';
 import xss from 'xss-clean';
 import helmet from 'helmet';
-import * as Sentry from "@sentry/node";
+// Import this first!
+import * as Sentry from "@sentry/node"
 const app = express();
+Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+  })
 
 // Modules
 import applicationRoutes from './routes/application.routes.js';
@@ -41,9 +45,6 @@ import { errorHandler } from './middlewares/errorHandlers.js';
 import { logger } from './middlewares/logEvents.js';
 
 
-Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-});
 
 
 app.use(errorHandler);

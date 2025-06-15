@@ -80,13 +80,16 @@ export const getArticleByIdService = async(id) =>{
  * @returns 
  */
 export const getArticlesByParams = async (request) =>{
-    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, ...queries } = request; 
+    const { page = 1, limit = LIMIT, sortBy = SORT_BY, order=ORDER, search, ...queries } = request; 
     const skip = (page - 1) * limit;
     try {
         let articles = await articleClient.findMany({
-            where:queries,
-            // skip: parseInt(skip),
-            // take: parseInt(limit),
+            where:!search ? {...queries, isActive:true} : {
+                name:{
+                    contains:search
+                },
+                isActive:true
+            },
             orderBy:{
                 name:'asc'
             }
