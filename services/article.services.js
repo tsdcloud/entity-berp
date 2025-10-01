@@ -35,8 +35,10 @@ export const getAllArticlesService = async(body) =>{
     try {
         let articles = await articleClient.findMany({
             where:{isActive:true},
-            // skip: parseInt(skip),
-            // take: parseInt(LIMIT),
+            include:{
+                articleFamilyId:true,
+                entity:true
+            },
             orderBy:{
                 name:'asc'
             }
@@ -65,6 +67,10 @@ export const getArticleByIdService = async(id) =>{
     try {
         let article = await articleClient.findFirst({
             where:{id, isActive: true},
+            include:{
+                articleFamilyId:true,
+                entity:true
+            },
         });
         if (!article) throw new Error(`No article found.`)
         return article;
@@ -89,6 +95,10 @@ export const getArticlesByParams = async (request) =>{
                     contains:search
                 },
                 isActive:true
+            },
+            include:{
+                articleFamilyId:true,
+                entity:true
             },
             orderBy:{
                 name:'asc'
@@ -119,7 +129,11 @@ export const updateArticleService = async (id, body) =>{
     try {
         let article = await articleClient.update({
             where:{id},
-            data:body
+            data:body,
+            include:{
+                articleFamilyId:true,
+                entity:true
+            },
         });
         return article;
     } catch (error) {
@@ -137,7 +151,11 @@ export const deleteArticleServices = async (id) =>{
     try {
         let article = await articleClient.update({
             where: {id},
-            data:{isActive:false}
+            data:{isActive:false},
+            include:{
+                articleFamilyId:true,
+                entity:true
+            },
         });
         return article
     } catch (error) {

@@ -15,8 +15,17 @@ import HTTP_STATUS from "../utils/http.utils.js";
  * @returns 
  */
 export const createArticleFamilyController = async (req, res) => {
+    console.log('hello famille article');
+    console.log(req.body);
+    
     try {
-        let articleFamily = await createArticleFamilyService(req.body);
+        // Nettoyer les données : convertir les chaînes vides en null
+        const cleanedData = {
+            ...req.body,
+            description: req.body.description === '' ? null : req.body.description
+        };
+        
+        let articleFamily = await createArticleFamilyService(cleanedData);
         res
         .status(HTTP_STATUS.CREATED.statusCode)
         .send(articleFamily);
@@ -24,7 +33,7 @@ export const createArticleFamilyController = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.sendStatus(HTTP_STATUS.BAD_REQUEST.statusCode);
-        return
+        return;
     }
 }
 
@@ -72,9 +81,9 @@ export const getAllArticleFamiliesController = async(req, res) => {
             .send(articleFamilies)
             return;
         } catch (error) {
-          console.log(error);
-          res.sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
-          return;
+            console.log(error);
+            res.sendStatus(HTTP_STATUS.NOT_FOUND.statusCode);
+            return;
         }
     }
 

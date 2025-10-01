@@ -276,11 +276,11 @@ model article {
   id              String          @id @unique @default(uuid())
   name            String
   displayName     String?
-  price           Float           @default(0)
-  quantity        Float           @default(0)
+  price           Float?           @default(0)
+  quantity        Float ?          @default(0)
   hasTVA          Boolean         @default(false)
   type            ARTICLE_TYPE
-  idEntity        String
+  idEntity        String?
   isActive        Boolean         @default(true)
   createdBy       String
   updatedBy       String?
@@ -289,7 +289,7 @@ model article {
   idArticleFamily String?
   code            String?
   articleFamilyId article_family? @relation(fields: [idArticleFamily], references: [id])
-  entity          entity          @relation(fields: [idEntity], references: [id])
+  entity          entity?          @relation(fields: [idEntity], references: [id])
 }
 
 model article_family {
