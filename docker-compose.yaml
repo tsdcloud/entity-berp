@@ -19,6 +19,7 @@ services:
       - USER_GATEWAY_API_URL=${USER_GATEWAY_API_URL}
       - INCIDENT_API_URL=${INCIDENT_API_URL}
       - ENTITY_API_URL=${ENTITY_API_URL}
+      - BUDGETLINE_API_URL=${BUDGETLINE_API_URL}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.entity.rule=Host(`entity.bfcgroupsa.com`)"
