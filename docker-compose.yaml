@@ -20,6 +20,8 @@ services:
     image: entity_image:latest
     container_name: traefik-entity-1
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:4001:3000"
     env_file: .env
     environment:
       - USER_GATEWAY_API_URL=$USER_GATEWAY_API_URL
